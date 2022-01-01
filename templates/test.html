@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	      <!-- 引入 Bootstrap -->
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	<style>
+    .rightValidate { width: 280px; margin: 0px auto; position: relative; line-height: 33px; height: 33px; text-align: center; z-index: 99; }
+    .v_rightBtn { position: absolute; left: 0; top: 0; height: 33px; width: 40px; background: #ddd; cursor: pointer; }
+    .imgBtn{ width:44px; height: 171px; position: absolute; left: 0;  }
+    .imgBtn img{ width:100%;z-index:99; }
+    .imgBg{ position:absolute;bottom:35px;width: 280px; height: 171px; box-shadow: 0px 4px 8px #3C5476; display:none;z-index:9;}
+    .hkinnerWrap{ border: 1px solid #eee; }
+    .green{ border-color:#34C6C2 !important; }
+    .green .v_rightBtn{ background: #34C6C2; color: #fff; }
+    .red{ border-color:red !important; }
+    .red .v_rightBtn{ background: red; color: #fff; }
+    .refresh{ position: absolute; width: 30px; height: 30px; right: 4px; top: 4px; font-size: 12px; color: #fff; text-shadow: 0px 0px 9px #333; cursor: pointer; display: none; }
+    .notSel{ user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -webkit-touch-callout: none; }
+</style>
+	
+	
+	
+</head>
+<body>
+
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">开始演示模态框</button>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" style="width: 300px;height: 250px;">
+        <div class="modal-content">
+			<div class="comImageValidate rightValidate" style="margin-top: 180px;margin-bottom: 10px;">
+				<div class="imgBg">
+					<div class="imgBtn" style="height: 45px;width: 55px">
+				       	<img />
+				   	</div>
+				    <span class="refresh" >
+				    	<img alt="" src="shuaxin.png">
+				    </span>
+				</div>
+				<div class="hkinnerWrap" style="height: 33px;position: relative">
+					<span  class="v_rightBtn "><em class="notSel">→</em></span>
+					<span class="huakuai"  style="font-size: 12px;line-height: 33px;color: #A9A9A9;">向右滑动滑块填充拼图完成验证</span>
+				    <input type = "hidden" name="validX"/>
+				</div>
+			</div>
+       </div><!-- /.modal-content -->
+   </div><!-- /.modal -->
+</div>
+
+	
+	
+			        
+
+
+
+<script>
+    var tokenId = "";
+    var y = "";
+    var x = "";
+    $(".comImageValidate").ready(function () {
+        validateImageInit();
+        $(".refresh").click(function () {
+            validateImageInit();
+        })
+        $(".hkinnerWrap").mouseover(function(){
+        	$(".imgBg").css("display","block");   
+        	$(".refresh").css("display","block");
+        });
+        
+        $(".imgBg").mouseover(function(){
+        	$(".imgBg").css("display","block");  
+        	$(".refresh").css("display","block");
+        });
+      
+
+        $('.v_rightBtn').on({
+            mousedown: function(e) {
+                $(".huakuai").html("");
+                $(".hkinnerWrap").removeClass("red green")
+                var el = $(this);
+                var os = el.offset();
+                dx = e.pageX - os.left;
+                //$(document)
+                $(this).parents(".hkinnerWrap").off('mousemove');
+                $(this).parents(".hkinnerWrap").on('mousemove', function(e) {
+                    var newLeft=e.pageX - dx;
+                    el.offset({
+                        left: newLeft
+                    });
+                    var newL=parseInt($(".v_rightBtn").css("left"));
+                    if(newL<=0){
+                        newL=0;
+                    }else if (newL>=225){
+                        newL=225;
+                    }
+                    $(".v_rightBtn").css("left",newL+"px");
+                    $(".imgBtn").offset({
+                        left: newLeft
+                    });
+                    $(".imgBtn").css("left",newL+"px")
+                }).on('mouseup', function(e) {
+                    //$(document)
+                    $(this).off('mousemove');
+                })
+            }
+        }).on("mouseup",function () {
+            $(this).parents(".hkinnerWrap").off('mousemove');
+            var l=$(this).css("left");
+            if(l.indexOf("px")!=-1){
+                l=l.substring(0,l.length-2);
+            }
+            x = l;
+            submitDate(l,y)
+        })
+    });
+    /*图形验证*/
+    function submitDate(x,y) {
+    	console.log(x);
+    	console.log(y);
+        $.ajax({
+            url:"/signature/install/verifyImageCode?X="+x+"&Y="+y,
+            dataType:'json',
+            type: "POST",
+            success:function (data) {
+                if(data==true){
+					$(".hkinnerWrap").addClass("green").removeClass("red");
+					$(".hkinnerWrap input[name='validX']").val(x); 
+					$("#X").val(x);
+					$("#Y").val(y);
+					layer.msg("验证成功", {time:1000,icon:1})
+                }
+           }
+       })
+    }
+
+    /*初始化图形验证码*/
+    function validateImageInit() {
+        $.ajax({
+            url:"/signature/install/getImageCode",
+            dataType:'json',
+            cache:false,
+            type: "get",
+            success:function (data) {
+                $(".huakuai").html("向右滑动滑块填充拼图");
+                $(".imgBg").css("background",'#fff url("data:image/jpg;base64,'+data.bigImage+'")');
+                $(".imgBtn").find("img").attr("src","data:image/png;base64,"+data.smallImage)
+                $(".imgBtn").css("top",data.yHeight);
+                y=data.yHeight;
+                $(".hkinnerWrap").removeClass("red green");
+                $(".v_rightBtn").css("left",0);
+                $(".imgBtn").css("left",0);
+            },error:function(err){
+            	alert('验证失败，请刷新页面');
+            }
+        })
+    }
+</script>
+
+</body>
+</html>

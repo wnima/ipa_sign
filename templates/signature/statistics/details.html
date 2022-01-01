@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>应用统计</title>
+    <style>
+        .flex-row-center {
+            flex-direction: row;
+            display: flex;
+            align-items: center;
+        }
+
+        html, body, div {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgb(235, 237, 242);
+        }
+        .list-view {
+            height: 100%;
+            width: 100%;
+        }
+
+        .list-top {
+            padding: 30px 30px 0px 30px;
+
+        }
+
+        .list-top-title {
+            color: #5a5959;
+            font-size: 16px;
+        }
+
+        .list-top-data {
+            margin-top: 20px;
+           /* height: 300px;*/
+            width: auto;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px 0 rgba(154, 167, 179, 0.1);
+        }
+
+        .list-top-data-top {
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            background: rgb(245, 246, 248);
+            height: 180px;
+        }
+
+        .list-top-data-bottom {
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            background: #fff;
+            height: 120px;
+        }
+
+        .list-top-data-bottom-view {
+            flex: 1;
+            padding: 10px;
+        }
+
+        .data-bottom-view-title {
+            color: #adb1b6;
+            font-size: 14px;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+
+        .data-bottom-view-num {
+            font-size: 26px;
+            color: #45474a;
+            font-weight: 400;
+            text-align: center;
+        }
+
+        .list-data {
+            padding: 30px;
+            height: auto;
+            width: auto;
+        }
+
+        .list-data-list {
+            margin-top: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px 0 rgba(154, 167, 179, 0.1);
+        }
+
+        .list-data-top {
+            height: 60px;
+            color: #adb1b6;
+            font-weight: 400;
+            font-size: 14px;
+            background: rgb(245, 246, 248);
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .list-data-top div {
+            margin-left: 20px;
+            flex: 1;
+        }
+
+        .list-data-data {
+            height: auto;
+            background: #fff;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+
+        .list-data-view {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            font-size: 14px;
+            color: #354052;
+            height: 60px;
+        }
+
+        .list-data-view div {
+            margin-left: 20px;
+            flex: 1;
+        }
+
+    </style>
+</head>
+<body>
+<!--列表-->
+<div class="list-view">
+    <div class="list-top">
+        <div class="list-top-title">用户统计</div>
+        <div class="list-top-data">
+            <div class="list-top-data-bottom list-top-data flex-row-center">
+                <div class="list-top-data-bottom-view">
+                    <div class="data-bottom-view-title">安装总数</div>
+                    <div class="data-bottom-view-num" th:text="${downloadCount}"></div>
+                </div>
+                <div class="list-top-data-bottom-view">
+                    <div class="data-bottom-view-title">充值总数</div>
+                    <div class="data-bottom-view-num" th:text="${rechargeCount}"></div>
+                </div>
+                <div class="list-top-data-bottom-view">
+                    <div class="data-bottom-view-title">剩余总数</div>
+                    <div class="data-bottom-view-num" th:text="${surplus}"></div>
+                </div>
+                <div class="list-top-data-bottom-view">
+                    <div class="data-bottom-view-title">用户总数</div>
+                    <div class="data-bottom-view-num" th:text="${userCount}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="list-data">
+        <div class="list-top-title flex-row-center">统计列表
+            <div style="flex:1">
+            </div>
+        </div>
+        <div class="list-data-list">
+            <div class="list-data-top">
+                <div style="flex:1">用户ID</div>
+                <div style="flex:1">用户名称</div>
+                <div style="flex:1">下载次数</div>
+                <div style="flex:1">充值次数</div>
+                <div style="flex:1">剩余次数</div>
+            </div>
+            <div class="list-data-data">
+                <div class="list-data-view" th:each="iterStat:${data}">
+                    <div th:text="${iterStat.userId}"></div>
+                    <div th:text="${iterStat.userName}"></div>
+                    <div th:text="${iterStat.downloadCount}"></div>
+                    <div th:text="${iterStat.rechargeCount}"></div>
+                    <div th:text="${iterStat.surplus}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

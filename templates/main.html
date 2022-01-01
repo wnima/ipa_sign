@@ -1,0 +1,1872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户中心</title>
+    <link href="https://cdn.bootcss.com/layer/2.3/skin/layer.css"
+          rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/layer/2.3/layer.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+    <link href="https://cdn.bootcss.com/webuploader/0.1.1/webuploader.css"
+          rel="stylesheet">
+    <script
+            src="https://cdn.bootcss.com/webuploader/0.1.1/webuploader.html5only.min.js"></script>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-row-center {
+            flex-direction: row;
+            display: flex;
+            align-items: center;
+        }
+
+        html, body, div {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgb(235, 237, 242);
+        }
+
+        .file-float {
+            position: fixed;
+            top: 0px;
+            right: 0px;
+            left: 0px;
+            bottom: 0px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .file-view {
+            width: 680px;
+            min-height: 420px;
+            height: auto;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            box-shadow: 0 4px 6px 0 rgba(154, 167, 179, 0.1);
+        }
+
+        .file-manager {
+            position: relative;
+        }
+
+        .file-button {
+            width: 200px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            color: #fff;
+            background: dodgerblue;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .file-button-text {
+            margin-top: 15px;
+            width: 100px;
+            height: 28px;
+            line-height: 28px;
+            text-align: center;
+            font-size: 12px;
+            color: #fff;
+            background: #67C23A;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .file-button-none {
+            background: #888 !important;
+            cursor: default;
+        }
+
+        #file {
+            top: 0px;
+            left: 0px;
+            overflow: hidden;
+            position: absolute;
+        }
+
+        .file-view-back {
+            min-width: 450px;
+            padding-top: 20px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            width: 100%;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            margin-right: 10px;
+        }
+
+        .file-view-back::-webkit-scrollbar {
+            width: 2px;
+            /**/
+        }
+
+        .file-view-back::-webkit-scrollbar-track {
+            background: rgb(239, 239, 239);
+            border-radius: 2px;
+        }
+
+        .file-view-back::-webkit-scrollbar-thumb {
+            background: #bfbfbf;
+            border-radius: 10px;
+        }
+
+        .file-view-back::-webkit-scrollbar-thumb:hover {
+            background: #666;
+        }
+
+        .file-view-back::-webkit-scrollbar-corner {
+        }
+
+
+        .file-title {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            font-size: 16px;
+            width: 100%;
+            color: #7b7f83;
+            padding: 14px 0px;
+        }
+
+        .file-view-header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin: 0px 100px;
+        }
+
+        .file-view-header-div {
+            position: relative;
+        }
+
+        .file-view-header-div-none .file-view-header-icon {
+            background: #dfe1e6 !important;
+        }
+
+        .file-view-header-icon {
+            border-color: #2d8cf0;
+            background-color: #2d8cf0;
+            width: 40px;
+            height: 40px;
+            min-height: 40px;
+            min-width: 40px;
+            border-radius: 50%;
+            line-height: 40px;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            margin: 0px 8px;
+        }
+
+        .file-view-header-text {
+            width: 100%;
+            position: absolute;
+            top: 65px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .file-view-header-solid {
+            height: 2px;
+            background-color: #e8eaec;
+            width: 100%;
+        }
+
+        .file-one {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .file-one-bottom {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 15px;
+            color: #a1a2a5;
+            line-height: 1.5;
+        }
+
+        .file-one-bottom p {
+            margin: 5px 0px;
+        }
+
+        .file-two {
+            padding-top: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0px 100px;
+        }
+
+        .file-two-logo {
+            position: relative;
+            padding: 0px 20px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            height: 100px;
+        }
+
+        .file-two-img {
+            width: 92px;
+            height: 92px;
+        }
+
+        .file-two-right {
+            margin-left: 24px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .file-two-title {
+            margin-bottom: 12px;
+            font-size: 16px;
+            color: #354052;
+        }
+
+        .file-two-text {
+            margin-bottom: 3px;
+            font-size: 14px;
+            color: #adb1b6;
+        }
+
+        .file-item {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            padding-top: 20px;
+        }
+
+        .file-item-left {
+            padding-top: 6px;
+            width: 120px;
+            text-align: right;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .file-item-right {
+            flex: 1;
+            margin-left: 20px;
+        }
+
+        .file-item-input {
+            height: 28px;
+            line-height: 28px;
+            min-width: 240px;
+            padding: 2px 7px;
+            font-size: 14px;
+            border: 1px solid #dfe2e6;
+            border-radius: 2px;
+            color: #354052;
+        }
+
+        .file-item-input.check {
+            border: 1px solid #FF0202;
+        }
+
+        .file-item-textarea {
+            height: 90px;
+            line-height: 28px;
+            min-width: 240px;
+            padding: 2px 7px;
+            font-size: 14px;
+            border: 1px solid #dfe2e6;
+            border-radius: 2px;
+            color: #354052;
+            resize: none;
+        }
+
+        .file-sumbit {
+            margin-top: 30px;
+            display: inline-block;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            background-image: none;
+            border: 1px solid transparent;
+            border-radius: 2px;
+            white-space: nowrap;
+            color: #2a9ff6;
+            background-color: #fff;
+            border-color: #2a9ff6;
+            width: 100px;
+            height: 36px;
+            line-height: 36px;
+            cursor: pointer;
+        }
+
+        #fileApp {
+            position: absolute;
+            z-index: 4;
+            left: 0px;
+            top: 0px;
+            opacity: 0;
+            width: 200px;
+            height: 50px;
+            cursor: pointer;
+        }
+
+        #fileApp div {
+            width: 200px !important;
+            height: 50px !important;
+        }
+    </style>
+    <style>
+        .list-view {
+            height: 100%;
+            width: 100%;
+        }
+
+        .list-top {
+            padding: 30px 30px 0px 30px;
+        }
+
+        .list-top-title {
+            color: #5a5959;
+            font-size: 16px;
+        }
+
+        .list-top-data {
+            margin-top: 20px;
+            height: 300px;
+            width: auto;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px 0 rgba(154, 167, 179, 0.1);
+        }
+
+        .list-top-data-top {
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            background: rgb(245, 246, 248);
+            height: 180px;
+        }
+
+        .list-top-data-bottom {
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            background: #fff;
+            height: 120px;
+        }
+
+        .list-top-data-bottom-view {
+            flex: 1;
+            padding: 10px;
+        }
+
+        .data-bottom-view-title {
+            color: #adb1b6;
+            font-size: 14px;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+
+        .data-bottom-view-num {
+            font-size: 26px;
+            color: #45474a;
+            font-weight: 400;
+            text-align: center;
+        }
+
+        .list-data {
+            padding: 30px;
+            height: auto;
+            width: auto;
+        }
+
+        .list-data-list {
+            margin-top: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px 0 rgba(154, 167, 179, 0.1);
+        }
+
+        .list-data-top {
+            height: 60px;
+            color: #adb1b6;
+            font-weight: 400;
+            font-size: 14px;
+            background: rgb(245, 246, 248);
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .list-data-top div {
+            margin-left: 20px;
+            flex: 1;
+        }
+
+        .list-data-data {
+            height: auto;
+            background: #fff;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+
+        .list-data-view {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            font-size: 14px;
+            color: #354052;
+            height: 60px;
+        }
+
+        .list-data-view div {
+            margin-left: 20px;
+            flex: 1;
+        }
+
+        .list-data-view-logo {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+        }
+
+        .list-data-view-span {
+            color: #6f7378;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+
+        .list-tips {
+            cursor: pointer;
+            border: 1px solid #2a9ff6;
+            border-radius: 2px;
+            height: 24px;
+            width: 48px;
+            color: #2a9ff6;
+            font-size: 12px;
+            text-align: center;
+            line-height: 24px;
+            display: block;
+        }
+
+        .list-tips-none {
+            border: 1px solid red;
+            border-radius: 2px;
+            height: 24px;
+            width: 48px;
+            color: red;
+            font-size: 12px;
+            text-align: center;
+            line-height: 24px;
+            display: block;
+        }
+
+        .list-info {
+            margin-right: 8px;
+            border: 1px solid #2a9ff6;
+            background: #2a9ff6;
+            border-radius: 2px;
+            height: 28px;
+            width: 60px;
+            color: #fff;
+            font-size: 14px;
+            text-align: center;
+            line-height: 28px;
+            display: block;
+        }
+
+        .progress-bar {
+            background: #2a9ff6 !important;
+        }
+
+        red {
+            color: red;
+            width: 6px;
+            margin-right: -6px;
+        }
+
+        .progress {
+            height: 25px;
+            background: #262626;
+            padding: 5px;
+            overflow: visible;
+            border-radius: 20px;
+            border-top: 1px solid #000;
+            border-bottom: 1px solid #7992a8;
+            margin-top: 10px;
+        }
+
+        .progress .progress-bar {
+            border-radius: 20px;
+            position: relative;
+            animation: animate-positive 2s;
+        }
+
+        .progress .progress-value {
+            display: block;
+            padding: 3px 7px;
+            font-size: 13px;
+            color: #fff;
+            border-radius: 4px;
+            background: #191919;
+            border: 1px solid #000;
+            position: absolute;
+            top: -40px;
+            right: -10px;
+        }
+
+        .progress .progress-value:after {
+            content: "";
+            border-top: 10px solid #191919;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            position: absolute;
+            bottom: -6px;
+            left: 26%;
+        }
+
+        .progress-bar.active {
+            animation: reverse progress-bar-stripes 0.40s linear infinite,
+            animate-positive 2s;
+        }
+
+        .progress.active .progress-bar, .progress-bar.active {
+            animation: progress-bar-stripes 2s linear infinite;
+        }
+
+        .progress-striped .progress-bar-info {
+            background-image: linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
+        }
+
+        .progress-striped .progress-bar, .progress-bar-striped {
+            background-size: 40px 40px;
+        }
+
+        .progress-bar-info {
+            border-right: 4px solid #258cd1;
+            border-right-width: 4px;
+            border-right-style: solid;
+            border-right-color: rgb(37, 140, 209);
+        }
+
+        .progress-bar {
+            background-color: #f1f3f6;
+            height: 100%;
+            text-align: right;
+            padding-right: 10px;
+            color: #6a6c6f;
+        }
+
+        .uploader-list {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .file-one-top {
+            font-size: 14px;
+            color: #666;
+            margin-top: 80px;
+            width: 450px;
+            line-height: 20px;
+            height: 240px;
+            overflow-y: scroll;
+        }
+
+        .file-one-select {
+            margin-top: 4px;
+            padding-bottom: 20px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            width: 450px;
+            font-size: 14px;
+        }
+
+        .file-one-select-text {
+            width: 450px;
+            font-size: 12px;
+            height: 40px;
+            line-height: 20px;
+            color: #999;
+        }
+
+        .one-select-nav {
+            margin-right: 6px;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .one-select-div {
+            width: 14px;
+            height: 14px;
+            border-radius: 2px;
+            border: 2px solid #2d8cf0;
+        }
+
+        .input-view {
+            margin-top: 20px;
+            padding-top: 30px;
+            padding-left: 30px;
+        }
+
+        .layui-layer-input {
+            font-size: 18px;
+            width: 160px;
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+<!--列表-->
+<div class="list-view" v-cloak>
+    <div class="list-top">
+        <div class="list-top-title">账户资料</div>
+        <div class="list-top-data">
+            <div class="list-top-data-top flex-row-center">
+                <div style="flex: 1" class="flex-row-center">
+                    <div class="flex-row-center" style="margin-left: 40px;">
+                        <svg t="1564655356789" class="icon" viewBox="0 0 1024 1024"
+                             version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5814"
+                             width="80" height="80">
+                            <path
+                                    d="M511.626 1.896C229.572 1.896 0.927 230.541 0.927 512.595c0 282.055 228.645 510.699 510.699 510.699s510.698-228.645 510.698-510.699S793.68 1.896 511.626 1.896z m0 69.641c243.606 0 441.058 197.474 441.058 441.058 0 87.347-25.392 168.762-69.194 237.271-73.419-77.609-170.944-132.204-280.597-151.829 70.004-33.755 118.404-105.164 118.404-188.066 0-115.388-93.535-208.922-208.923-208.922S303.452 294.583 303.452 409.97c0 82.902 48.399 154.311 118.403 188.066-110.093 19.704-207.96 74.661-281.479 152.77-44.177-68.704-69.808-150.465-69.808-238.211 0-243.584 197.496-441.058 441.058-441.058z"
+                                    p-id="5815" fill="#1296db"></path>
+                        </svg>
+                        <div
+                                style="margin-left: 20px; font-size: 18px; padding-bottom: 20px; color: #6f7378;">
+                            {{user_name}}
+                        </div>
+                    </div>
+                    <div style="flex: 1"></div>
+                    <div style="padding-right: 50px">
+                        <div class="data-bottom-view-title">可安装数</div>
+                        <div class="data-bottom-view-num">
+                            {{money}} <span
+                                    style="color: #adb1b6; font-size: 14px; text-align: center;">台</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="list-top-data-bottom flex-row-center">
+                <div class="list-top-data-bottom-view">
+                    <div class="data-bottom-view-title">今日PV</div>
+                    <div class="data-bottom-view-num">{{pv}}</div>
+                </div>
+                <div class="list-top-data-bottom-view">
+                    <div class="data-bottom-view-title">今日UV</div>
+                    <div class="data-bottom-view-num">{{uv}}</div>
+                </div>
+                <div class="list-top-data-bottom-view">
+                    <div class="data-bottom-view-title">今日IP</div>
+                    <div class="data-bottom-view-num">{{ip}}</div>
+                </div>
+                <div class="list-top-data-bottom-view">
+                    <div class="data-bottom-view-title">今日下载</div>
+                    <div class="data-bottom-view-num">{{download}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="list-data">
+        <div class="list-top-title flex-row-center">
+            应用列表
+            <div style="flex: 1"></div>
+            <div class="file-button" @click="fileUp"
+                 style="width: 120px; height: 36px; line-height: 36px; font-size: 14px">
+                发布应用
+            </div>
+        </div>
+        <div class="list-data-list">
+            <div class="list-data-top">
+                <div style="flex: 1">应用名称</div>
+                <div style="flex: 1">类型</div>
+                <div style="flex: 1">总下载量</div>
+                <div style="flex: 1">下载地址</div>
+                <div style="width: 100px">配额|剩余配额</div>
+                <div style="flex: 1">安卓包</div>
+                <div style="flex: 1">上架状态</div>
+                <div style="flex: 2.5">操作</div>
+            </div>
+            <div class="list-data-data">
+	                <div class="list-data-view" v-for="item in list">
+	                    <div class="flex-row-center">
+	                        <img class="list-data-view-logo" :src="item.img"> <span
+	                                class="list-data-view-span">{{item.title}}</span>
+	                    </div>
+	                    <div>{{item.type == 1 ? '超级签' : item.type == 2 ? '企业签' : '未知'}}</div>
+	                    <div>{{item.down_num}}</div>
+	                    <div>
+	                        <a v-if="item.type == 1 ||(item.type == 2 && item.status == 2)" :href="item.link" target="_blank">{{item.link}}</a>
+	                    </div>
+	                    <div style="width: 100px;margin:0px;text-align:center;"><span v-if="item.quota>=0">{{item.quota}}|{{item.quota_surplus}}</span>
+	                        <span v-else>未配置</span></div>
+	                    <div>
+	                        <a :href="item.androidUrl" target="_blank">{{item.androidUrl != null ? "下载" : "未上传"}}</a>
+	                    </div>
+	                    <div>
+                    		<tips class="list-tips" v-if="item.status == 1">审核中</tips>
+                        	<tips class="list-tips" v-else-if="item.enable" @click="tipsCut(item,0)">启用中</tips>
+                        	<tips class="list-tips list-tips-none" @click="tipsCut(item,1)" v-else>停用中</tips>
+	                    </div>
+	                    <div class="flex-row-center">
+	                        <info class="list-info" style="background:#0a7df3 ;border-color:#0a7df3" :data="item.id"
+	                        	  @click="updateApk">上传APK
+	                        </info>
+                            <info class="list-info" style="background:#00a43e;border-color:#00a43e"
+                                  @click="copyText(item)">复制信息
+                            </info>
+	                        <info class="list-info" style="background:orange;border-color: orange"
+	                              @click="setQuota(item)">配额
+	                        </info>
+	                        <info class="list-info" @click="fileInfo(item)">修改</info>
+	                        <info class="list-info" style="background: red;border-color:red"
+	                              @click="deleteApp(item)">删除
+	                        </info>
+	                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--弹框-->
+    <div class="file-float" v-show="fileUpShow">
+        <div class="file-view">
+            <div class="file-title">
+                <div style="margin-left: 16px">新增应用</div>
+                <div style="flex: 1"></div>
+                <svg t="1564552469643" @click="fileClear()"
+                     style="margin-right: 14px" class="icon" viewBox="0 0 1024 1024"
+                     version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2456"
+                     width="24" height="24">
+                    <path
+                            d="M562.28 513.001l197.101-197.082c13.61-13.609 13.587-35.657-0.022-49.268-13.609-13.609-35.657-13.621-49.268-0.011L513.005 463.728 315.908 266.641c-13.61-13.61-35.658-13.61-49.268 0-13.609 13.609-13.609 35.669 0 49.278l197.083 197.088-197.082 197.085c-13.609 13.609-13.609 35.668 0 49.279 13.609 13.609 35.657 13.586 49.245 0l197.109-197.09 197.073 197.078c13.633 13.621 35.681 13.609 49.29 0s13.633-35.658 0.022-49.268l-197.1-197.09z"
+                            p-id="2457" fill="#7b7f83"></path>
+                </svg>
+            </div>
+            <div class="file-view-back">
+                <!--状态  -->
+                <div class="file-view-header" v-if="!is_set">
+                    <div class="file-view-header-div" id="file-view-1">
+                        <div class="file-view-header-icon">1</div>
+                        <div class="file-view-header-text">上传应用</div>
+                    </div>
+                    <div class="file-view-header-solid"></div>
+                    <div class="file-view-header-div"
+                         :class="[fileData?'':'file-view-header-div-none']">
+                        <div class="file-view-header-icon">2</div>
+                        <div class="file-view-header-text">解析</div>
+                    </div>
+                    <div class="file-view-header-solid"></div>
+                    <div class="file-view-header-div"
+                         :class="[fileData?'':'file-view-header-div-none']">
+                        <div class="file-view-header-icon">3</div>
+                        <div class="file-view-header-text">填写信息</div>
+                    </div>
+                </div>
+                <!--底部内容区-->
+                <div class="file-one" v-show="!fileData">
+                    <div class="file-one-top" v-html="notice" v-if="!is_select"></div>
+                    <div class="file-one-top" v-if="is_select">
+                        <p>1.ipa包里必须要有embedded.mobileprovision,确保权限完整;</p>
+                        <p>2.ipa包里确保info.plist里的bundleid与二进制执行文件中的bundleid一致;</p>
+                        <p>3.ipa包最好是没有被其他机构重签过的包，不然可能会导致应用闪退;</p>
+                        <p>4.ipa包的打包模式使用 development。</p>
+                    </div>
+                    <div class="file-one-select-text">
+                        &nbsp;&nbsp;<span
+                                v-show="!is_select">您已仔细阅读并同意《万能签服务协议》中的全部内容, 点击“我同意”代表您已仔细阅读并同意以上所有内容。</span>
+                    </div>
+                    <div class="file-one-select">
+                        <div class="one-select-nav" @click="is_select = !is_select">
+                            <svg t="1587450015202"
+                                 v-show="is_select"
+                                 class="icon" viewBox="0 0 1024 1024"
+                                 version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="11364" width="20" height="20">
+                                <path d="M850.6 63.9H173.7c-60.1 0-109.4 49.2-109.4 109.3v676.9c0 60.1 49.2 109.4 109.4 109.4h676.9c60.2 0 109.4-49.2 109.4-109.4V173.3c-0.1-60.1-49.3-109.4-109.4-109.4z m-49.4 278L469.6 764.5c-12.5 16-31.6 25.4-51.8 25.7h-1c-19.9 0-38.8-8.8-51.6-24.2L224.3 596.9c-23.8-28.5-19.9-70.8 8.6-94.6 28.5-23.8 70.8-19.9 94.6 8.6l87.7 105.3L695.5 259c22.9-29.3 65.2-34.2 94.3-11.4 29.2 22.9 34.3 65.2 11.4 94.3z"
+                                      p-id="11365" fill="#2d8cf0"></path>
+                            </svg>
+                            <div class="one-select-div" v-show="!is_select"></div>
+                        </div>
+                        我同意
+                    </div>
+                    <div class="file-manager">
+                        <div class="file-button" :class="is_select?'':'file-button-none'">立即上传</div>
+                        <div id="fileApp" v-show="is_select"></div>
+                        <!-- <input type="file" id="file" name="file"
+                            style="opacity: 0;width: 200px;height: 50px;cursor: pointer" accept=".ipa">-->
+                    </div>
+                    <div class="file-one-bottom">
+                        <p>点击按钮选择应用的安装包</p>
+                        <p class="h1">IPA文件，单个文件最大支持2GB)</p>
+                    </div>
+                    <!--<div style="width: 320px; height: 20px; z-index: 20000;text-align: center;">
+                        <div class="progress progress-striped active" style="margin-bottom: 0;padding-right: 20px">
+                            <div class="progress-bar progress-bar-info progress-bar-striped active" id="pb" style="width: 0%;">
+                                <div class="progress-value" id="pb-text">0%</div>
+                            </div>
+                        </div>
+
+                    </div>-->
+                    <div id="thelist" class="uploader-list" style="flex:1">
+
+                    </div>
+
+                </div>
+                <div class="file-two" v-if="fileData">
+                    <!--style="display: none"-->
+                    <div class="flex-row-center">
+                        <div class="file-two-logo">
+                            <img class="file-two-img" :src="fileData.img">
+                            <div class="file-two-right">
+                                <div class="file-two-title">{{fileData.title}}</div>
+                                <div style="flex: 1"></div>
+                                <div class="file-two-text noid">版本：{{fileData.no}}</div>
+                                <div class="file-two-text size">大小：{{fileData.size}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="file-item">
+                        <div class="file-item-left">显示icon</div>
+                        <div class="file-item-right" style="flex-direction: row;display: flex">
+                            <div v-if="fileData.showIconUrl">
+                                <div style="position: relative; width: 40px; height: 40px">
+                                    <img style="width: 40px; height: 40px"
+                                         :src="fileData.showIconUrl">
+                                    <svg t="1565578433074" class="icon" @click="delFileImg()"
+                                         style="right: -8px; top: -8px; position: absolute"
+                                         viewBox="0 0 1024 1024" version="1.1"
+                                         xmlns="http://www.w3.org/2000/svg" p-id="6267" width="18"
+                                         height="18">
+                                        <path
+                                                d="M509.661446 85.15859c109.740029 0 208.71288 44.322972 280.346969 116.785384h0.381909c71.995521 71.786648 116.487433 171.111715 116.487434 280.385877 0 109.636617-44.491913 208.554178-116.487434 280.723759l-2.303742 2.110228c-71.488697 70.754571-170.288512 114.31782-278.425136 114.31782-109.691907 0-209.02107-45.013071-280.446286-116.428048h-0.55085c-71.702689-72.169581-116.110644-171.087142-116.110644-280.723759 0-109.274161 44.407954-208.599229 116.110644-280.385877l2.303742-2.51159c72.208489-70.332731 170.649943-114.273793 278.693394-114.273794z m104.041083 230.701842l-104.041083 104.661558-104.816165-104.661558c-16.651447-17.465436-45.042763-17.465436-61.480218 0-17.669189 16.437455-17.669189 45.01819 0 62.532772l103.803542 103.937671-103.803542 104.299102c-17.669189 17.1081-17.669189 45.316141 0 62.821508 16.437455 17.152127 44.829795 17.152127 61.480218 0l104.816165-104.99432 104.041083 104.99432c17.643592 17.152127 45.335594 17.152127 62.687379 0 17.514582-17.505367 17.514582-45.356072 0-62.821508L572.223911 482.330875l104.165997-103.937671c17.514582-17.514582 17.514582-46.095317 0-62.532772-17.350761-17.465436-45.042763-17.465436-62.687379 0zM728.016254 263.777433c-56.079223-55.756699-133.078471-89.679044-218.353784-89.679044-84.278049 0-160.935319 32.820644-216.512839 87.866767l-1.96586 2.149135c-55.716768 55.334858-90.255491 133.198266-90.255491 218.21556 0 84.977363 34.5377 162.861248 90.255491 218.21556 55.74646 56.030077 132.746732 90.374262 218.478699 90.374262 84.367127 0 160.860576-33.60494 216.204649-88.239461l2.025245-2.134801c56.227686-55.354312 90.379382-133.238197 90.379382-218.21556 0-85.017294-34.150671-162.880701-90.379382-218.21556l0.12389-0.336858z"
+                                                fill="#d81e06" p-id="6268"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div v-if="!fileData.showIconUrl" style="position: relative">
+                                <svg t="1565575098007" class="icon" viewBox="0 0 1024 1024"
+                                     version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3264"
+                                     width="40" height="40" style="position: absolute">
+                                    <path
+                                            d="M512 12.8C236.7488 12.8 12.8 236.7488 12.8 512s223.9488 499.2 499.2 499.2a496.4864 496.4864 0 0 0 448.3072-279.296 38.4 38.4 0 0 0-68.9152-33.8944A420.096 420.096 0 0 1 512 934.4c-232.9088 0-422.4-189.4912-422.4-422.4S279.0912 89.6 512 89.6s422.4 189.4912 422.4 422.4a38.4 38.4 0 0 0 76.8 0c0-275.2512-223.9488-499.2-499.2-499.2z"
+                                            fill="#438CFF" p-id="3265"></path>
+                                    <path
+                                            d="M512 716.8a38.4 38.4 0 0 0 38.4-38.4v-128h128a38.4 38.4 0 0 0 0-76.8h-128v-128a38.4 38.4 0 0 0-76.8 0v128h-128a38.4 38.4 0 0 0 0 76.8h128v128c0 21.1968 17.2032 38.4 38.4 38.4z"
+                                            fill="#438CFF" p-id="3266"></path>
+                                </svg>
+                                <input type="file" id="fileImg" name="file"
+                                       style="opacity: 0; width: 40px; height: 40px; cursor: pointer"
+                                       @change="fileImgUp(event)">
+                            </div>
+                            <!--应用截图-->
+                            <div class="file-item" style="padding: 0px">
+                                <div class="file-item-left">应用截图</div>
+                                <div class="file-item-right">
+                                    <div v-if="fileData.showPicUrl">
+                                        <div style="position: relative; width: 40px; height: 40px">
+                                            <img style="width: 40px; height: 40px"
+                                                 @click="vueFloatImg(fileData.showPicUrl)"
+                                                 :src="fileData.showPicUrl">
+                                            <svg t="1565578433074" class="icon" @click="delFilePic()"
+                                                 style="right: -8px; top: -8px; position: absolute"
+                                                 viewBox="0 0 1024 1024" version="1.1"
+                                                 xmlns="http://www.w3.org/2000/svg" p-id="6267" width="18"
+                                                 height="18">
+                                                <path
+                                                        d="M509.661446 85.15859c109.740029 0 208.71288 44.322972 280.346969 116.785384h0.381909c71.995521 71.786648 116.487433 171.111715 116.487434 280.385877 0 109.636617-44.491913 208.554178-116.487434 280.723759l-2.303742 2.110228c-71.488697 70.754571-170.288512 114.31782-278.425136 114.31782-109.691907 0-209.02107-45.013071-280.446286-116.428048h-0.55085c-71.702689-72.169581-116.110644-171.087142-116.110644-280.723759 0-109.274161 44.407954-208.599229 116.110644-280.385877l2.303742-2.51159c72.208489-70.332731 170.649943-114.273793 278.693394-114.273794z m104.041083 230.701842l-104.041083 104.661558-104.816165-104.661558c-16.651447-17.465436-45.042763-17.465436-61.480218 0-17.669189 16.437455-17.669189 45.01819 0 62.532772l103.803542 103.937671-103.803542 104.299102c-17.669189 17.1081-17.669189 45.316141 0 62.821508 16.437455 17.152127 44.829795 17.152127 61.480218 0l104.816165-104.99432 104.041083 104.99432c17.643592 17.152127 45.335594 17.152127 62.687379 0 17.514582-17.505367 17.514582-45.356072 0-62.821508L572.223911 482.330875l104.165997-103.937671c17.514582-17.514582 17.514582-46.095317 0-62.532772-17.350761-17.465436-45.042763-17.465436-62.687379 0zM728.016254 263.777433c-56.079223-55.756699-133.078471-89.679044-218.353784-89.679044-84.278049 0-160.935319 32.820644-216.512839 87.866767l-1.96586 2.149135c-55.716768 55.334858-90.255491 133.198266-90.255491 218.21556 0 84.977363 34.5377 162.861248 90.255491 218.21556 55.74646 56.030077 132.746732 90.374262 218.478699 90.374262 84.367127 0 160.860576-33.60494 216.204649-88.239461l2.025245-2.134801c56.227686-55.354312 90.379382-133.238197 90.379382-218.21556 0-85.017294-34.150671-162.880701-90.379382-218.21556l0.12389-0.336858z"
+                                                        fill="#d81e06" p-id="6268"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div v-if="!fileData.showPicUrl" style="position: relative">
+                                        <svg t="1565575098007" class="icon" viewBox="0 0 1024 1024"
+                                             version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3264"
+                                             width="40" height="40" style="position: absolute">
+                                            <path
+                                                    d="M512 12.8C236.7488 12.8 12.8 236.7488 12.8 512s223.9488 499.2 499.2 499.2a496.4864 496.4864 0 0 0 448.3072-279.296 38.4 38.4 0 0 0-68.9152-33.8944A420.096 420.096 0 0 1 512 934.4c-232.9088 0-422.4-189.4912-422.4-422.4S279.0912 89.6 512 89.6s422.4 189.4912 422.4 422.4a38.4 38.4 0 0 0 76.8 0c0-275.2512-223.9488-499.2-499.2-499.2z"
+                                                    fill="#438CFF" p-id="3265"></path>
+                                            <path
+                                                    d="M512 716.8a38.4 38.4 0 0 0 38.4-38.4v-128h128a38.4 38.4 0 0 0 0-76.8h-128v-128a38.4 38.4 0 0 0-76.8 0v128h-128a38.4 38.4 0 0 0 0 76.8h128v128c0 21.1968 17.2032 38.4 38.4 38.4z"
+                                                    fill="#438CFF" p-id="3266"></path>
+                                        </svg>
+                                        <input type="file" id="filePic" name="file"
+                                               style="opacity: 0; width: 40px; height: 40px; cursor: pointer"
+                                               @change="filePicUp(event)">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- //销售商，应用类型，评分数显示，应用介绍-->
+                    <div class="file-item">
+                        <div class="file-item-left">应用名称</div>
+                        <div class="file-item-right">
+                            <input class="file-item-input" v-model="fileData.appName"
+                                   placeholder="填写应用名(可空)">
+                        </div>
+                    </div>
+                    <div class="file-item">
+                        <div class="file-item-left">安装方式
+                            <red>*</red>
+                        </div>
+                        <div class="file-item-right">
+                            <select class="file-item-input" v-model="fileData.installType">
+                                <option value="1">公开安装</option>
+                                <option value="2">拼图安装</option>
+                                <option value="3">密码安装</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="file-item" v-if="fileData.installType==3">
+                        <div class="file-item-left">安装密码
+                            <red>*</red>
+                        </div>
+                        <div class="file-item-right">
+                            <input class="file-item-input" v-model="fileData.password"
+                                   placeholder="填写安装密码">
+                        </div>
+                    </div>
+                    <div class="file-item">
+                        <div class="file-item-left">开发者
+                        </div>
+                        <div class="file-item-right">
+                            <input class="file-item-input" v-model="fileData.shop"
+                                   placeholder="填写开发者(可空)">
+                        </div>
+                    </div>
+                    <div class="file-item">
+                        <div class="file-item-left">备注名</div>
+                        <div class="file-item-right">
+                            <input class="file-item-input" v-model="fileData.remarkname"
+                                   placeholder="填写备注名(可空)">
+                        </div>
+                    </div>
+                    <div class="file-item">
+                        <div class="file-item-left">签名类型</div>
+                        <div class="file-item-right">
+                        	<select class="file-item-input" v-model="fileData.appType">
+                                <option value="1">个人签</option>
+                                <option value="2">企业签</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="file-item">
+                        <div class="file-item-left">应用分类</div>
+                        <div class="file-item-right">
+                            <select class="file-item-input" v-model="fileData.select">
+                                <option value="1">摄影与录像</option>
+                                <option value="2">生活</option>
+                                <option value="3">体育</option>
+                                <option value="4">天气</option>
+                                <option value="5">图书</option>
+                                <option value="6">效率</option>
+                                <option value="7">新闻</option>
+                                <option value="8">医疗</option>
+                                <option value="9">音乐</option>
+                                <option value="10">娱乐</option>
+                                <option value="11">策略游戏</option>
+                                <option value="12">动作游戏</option>
+                                <option value="13">儿童游戏</option>
+                                <option value="14">角色扮演</option>
+                                <option value="15">竞速游戏</option>
+                                <option value="16">聚会游戏</option>
+                                <option value="17">卡牌游戏</option>
+                                <option value="18">冒险游戏</option>
+                                <option value="19">模拟游戏</option>
+                                <option value="20">日月游戏</option>
+                                <option value="21">文字游戏</option>
+                                <option value="22">问答游戏</option>
+                                <option value="23">休闲游戏</option>
+                                <option value="24">益智解谜</option>
+                                <option value="25">音乐游戏</option>
+                                <option value="26">棋牌游戏</option>
+                                <option value="27">桌面游戏</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="file-item">
+                        <div class="file-item-left">评分数显示</div>
+                        <div class="file-item-right">
+                            <input class="file-item-input" v-model="fileData.num"
+                                   type="number" value="5" min="0" max="5"
+                                   style="min-width: 100px; width: 100px">
+                        </div>
+                    </div>
+                    <div class="file-item">
+                        <div class="file-item-left">应用介绍</div>
+                        <div class="file-item-right">
+								<textarea class="file-item-textarea" v-model="fileData.remark"
+                                          placeholder="应用详细介绍，500字以内"></textarea>
+                        </div>
+                    </div>
+                    <div class="file-item">
+                        <div class="file-item-left">UDID标题</div>
+                        <div class="file-item-right">
+								<textarea class="file-item-textarea" v-model="fileData.udidTitle"
+                                          placeholder="UDID安装文件描述，50字以内"></textarea>
+                        </div>
+                    </div>
+                    <div class="file-item">
+                        <div class="file-item-left">UDID描述</div>
+                        <div class="file-item-right">
+								<textarea class="file-item-textarea" v-model="fileData.udidDescription"
+                                          placeholder="UDID安装文件描述，100字以内"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="file-item">
+                        <div class="file-item-left"></div>
+                        <div class="file-item-right"
+                             style="padding-bottom: 40px; display: flex; flex-direction: row">
+                            <div class="file-sumbit" @click="sumbitFile">确认</div>
+                           <div class="file-manager" style="margin-top: 30px;margin-bottom: 0px;margin-left: 20px" v-if="is_set">
+	                            <div class="file-button" style="width: 124px;height: 38px;line-height: 38px">更新应用</div>
+	                            <input type="file" id="file" name="file"
+	                                   style="opacity: 0;width: 124px;height: 38px;cursor: pointer"
+	                                   @change="fileDataUp(event,fileData.id)" accept=".ipa">
+                        	</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="height: 10px;width: 100%"></div>
+        </div>
+    </div>
+    <!--配额-->
+    <div></div>
+</div>
+</body>
+
+<script>
+    var _this = null;
+
+    function vueFloatImg(img) {
+        var image = new Image();
+        image.src = img;
+        var style = "cursor:zoom-out;height:80%;width:auto;z-index:10000000;"
+        image.onload = function () {
+            var widht = image.width;
+            var height = image.height;
+            if (widht > height) {
+                style = "cursor:zoom-out;width:80%;height:auto;z-index:10000000;"
+            }
+            var div = document.createElement('div');
+            div.style.cssText += ";position: fixed;left:0px;right:0px;top:0px;bottom:0px;" +
+                "height: 100%;width: 100%;z-index: 9999999;background: rgba(255, 255, 255, 0.8);" +
+                "display: none;flex-direction: row;align-items: center;justify-content: center;";
+            div.onclick = function (e) {
+                e.stopPropagation();
+                floatfadeOut(div)
+            }
+            div.innerHTML = '<img src=' + img + ' ' + 'style=' + style + '>'
+            document.body.appendChild(div);
+            floatFadeIn(div);
+        }
+    }
+
+    //进入淡入
+    function floatFadeIn(name, num, time) {
+        name.style.display = 'flex';
+        time = time || 40;//速率
+        num = num = 0.6;//初始透明度
+        name.childNodes[0].style.opacity = num;
+        var setD = setInterval(function () {
+            if (num >= 1) {
+                return clearInterval(setD)
+            }
+            num = num + 0.05;
+            name.childNodes[0].style.opacity = num;
+        }, time)
+    }
+
+    //进入淡出
+    function floatfadeOut(name, num, time) {
+        time = time || 40;//速率
+        num = num || 1;//初始透明度
+        var setD = setInterval(function () {
+            if (num <= 0.6) {
+                if (document.body) {
+                    document.body.removeChild(name);
+                }
+                return clearInterval(setD)
+            }
+            num = num - 0.05;
+            name.childNodes[0].style.opacity = num;
+        }, time)
+    }
+
+    var vueObj = new Vue({
+        el: '.list-view',
+        data: {
+            //数量
+            list: [],
+            money: 0,//余额
+            pv: 0,
+            uv: 0,
+            ip: 0,
+            download: 0,//下载量
+            user_name: '',//用户名
+            //业务逻辑
+            fileUpShow: false,//显示弹框信息
+            fileData: null,//上传信息
+            is_set: false,//是否修改
+            is_select: false,//是否同意
+            inputNum: 1,
+            notice: '服务使用条款:</br>' +
+                '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请在使用万能签服务前，仔细阅读并充分理解以下内容及条款:</br>' +
+                '您知晓并同意，您提交给超级签名的App，不包括任何违反中国境内相关法律的内容，也不会用于违反中国境内相关法律的任何用途。否则，由此而出现的任何法律风险和后果，将由您自行全部承担；</br>' +
+                '您知晓并同意，您并不会将超级签名所提供的任何一项服务用于违反中国相关法律的用途，否则，由此而出现的所有法律后果，将由您自行全部承担；</br>' +
+                '您知晓并同意，您没有向超级签名提交任何的虚假信息或材料，也没有故意隐瞒您的 App 中可能存在的违法内容。否则，由此出现的所有后果，将由您自行全部承担；</br>' +
+                '您知晓并同意，您向我们提供的 App（手机应用程序）保证您拥有完整独立的知识产权，包括但不限于外观设计、著作权、文本，图形，徽标，按钮图标，图像，音频剪辑，且不会被用于未经许可的任何有关产品或服务；</br>' +
+                '您知晓并同意，我们在需要时通过技术手段合法收集和使用有关您及您提供的App（手机应用程序）所使用本服务的技术性或诊断性信息，收集到的这些信息将用于改进我们的服务内容，提升我们的服务品质。我们不会将您的信息和内容分享或出售给其他的组织；</br>' +
+                '我们作为第三方中立平台，不具有对您上传的 App 进行审查的义务，但我们在认为有需要时，我们有权利对您上传的内容进行审查，审查结果及审查后的进一步动作可由我们进行自行裁定。您对此表示理解并同意，并愿意承担因审查出现的全部后果；</br>' +
+                '您知晓并同意，由我们提供软件签名的技术，您购买此服务是用于您的 App 的内部测试之用途，且需符合苹果万能签的所有规定，否则，因此而产生的法律后果由您自行全部承担；</br>' +
+                '您知晓并同意，苹果万能签因受到苹果政策影响，在未来可能会存在被苹果撤销从而导致应用出现无法安装、或已经安装的应用无法打开等情况，您同意并愿意独立承担该风险以及该风险导致的后续一切损失，并接受我们在后续可能为此而做出任何补偿等措施；</br>' +
+                '您知晓并同意，我们提供签名技术来供您下载您的应用，因您对外分发导致App被滥用、恶意下载、刷量而造成的损失，我们仅提供必要的数据支持和反作弊服务，您同意并愿意独立承担因对外分发和推广而导致的风险和风险后续的一切损失。</br></br>',
+        },
+        watch: {
+            inputNum: function (res, aes) {
+            }
+        },
+        created(){
+        },
+        methods: {
+            toTime: function (time) {
+                time = time * 1000
+                var t = new Date(time);
+                var tf = function (i) {
+                    return (i < 10 ? '0' : '') + i
+                };
+                return 'yyyy-MM-dd HH:mm:ss'.replace(/yyyy|MM|dd|HH|mm|ss/g, function (a) {
+                    switch (a) {
+                        case 'yyyy':
+                            return tf(t.getFullYear());
+                            break;
+                        case 'MM':
+                            return tf(t.getMonth() + 1);
+                            break;
+                        case 'mm':
+                            return tf(t.getMinutes());
+                            break;
+                        case 'dd':
+                            return tf(t.getDate());
+                            break;
+                        case 'HH':
+                            return tf(t.getHours());
+                            break;
+                        case 'ss':
+                            return tf(t.getSeconds());
+                            break;
+                    }
+                })
+            },
+            setQuota: function (item) {
+                var num = parseInt(item.quota);
+                layer.prompt({
+                        formType: 0,
+                        value: num,
+                        title: '修改配额',
+                        skin: 'layui-layer-rim', //加上边框
+                        area: ['420px', '240px'], //宽高
+                        btn: ['确定', '取消', '关闭配额'], //可以无限个按钮,
+                        btn2: function (index) {
+                        console.log(2)
+                        },
+                        btn3: function (index) {
+                            console.log(3)
+                            var parmars = {
+                                id: item.id,
+                                num: -1,
+                            };
+                            var formData = new FormData();
+                            for (var key in parmars) {
+                                var value = parmars[key];
+                                formData.append(key, value);
+                            }
+                            $.ajax({
+                                url: '/signature/app/quota',
+                                type: 'post',
+                                contentType: "application/x-www-form-urlencoded",
+                                dataType: "json",
+                                timeout: 30000,
+                                data: formData,
+                                processData: false,//data数据是否转为字符串数据
+                                contentType: false,
+                                success: function (data) {
+                                    layer.close(index);
+                                    if (data.code == 0) {
+                                        _this.getData()
+                                        layer.msg(data.msg)
+                                    } else {
+                                        layer.msg(data.msg)
+                                    }
+                                },
+                            })
+                        }
+                    },function (value, index, elem) {
+                        console.log(1)
+                        if (value == '00' || value <= 0 || value != parseInt(value.replace(/[^0-9]/g, ''))) {
+                            layer.msg('请输入正确的数值')
+                            return;
+                        }
+                        var parmars = {
+                            id: item.id,
+                            num: value,
+                        };
+                        var formData = new FormData();
+                        for (var key in parmars) {
+                            var value = parmars[key];
+                            formData.append(key, value);
+                        }
+                        $.ajax({
+                            url: '/signature/app/quota',
+                            type: 'post',
+                            contentType: "application/x-www-form-urlencoded",
+                            dataType: "json",
+                            timeout: 30000,
+                            data: formData,
+                            processData: false,//data数据是否转为字符串数据
+                            contentType: false,
+                            success: function (data) {
+                                layer.close(index);
+                                if (data.code == 0) {
+                                    _this.getData()
+                                    layer.msg(data.msg)
+                                } else {
+                                    layer.msg(data.msg)
+                                }
+                            },
+                        })
+                    }
+                );
+
+            },
+            toNum: function (num) {
+                num = parseInt(num);
+                if (num === 0) {
+                    return '0.00'
+                }
+                if (num == '') {
+                    return num
+                }
+                var leng = num.toString().length;
+                if (leng == 2) {
+                    num = '0.'.concat(num);
+                    return num
+                } else if (leng == 1) {
+                    num = '0.0'.concat(num);
+                    return num
+                } else {
+                    var a = num.toString().substring(0, leng - 2);
+                    var b = num.toString().substring(leng - 2, leng);
+                    var sum = a.concat('.').concat(b);
+                    return sum
+                }
+            },
+            /*列表*/
+            getData: function () {
+                // 列表
+                $.ajax({
+                    url: '/signature/app/list',
+                    type: 'post',
+                    contentType: "application/x-www-form-urlencoded",
+                    dataType: "json",
+                    timeout: 30000,
+                    data: {},
+                    processData: false,//data数据是否转为字符串数据
+                    contentType: false,
+                    success: function (data) {
+                        if (data.code == 0) {
+                            if (data.data.list.length) {
+                            	console.log(_this.list);
+                            	console.log(data.data.list);
+                                _this.list = data.data.list;//列表数据
+                            }
+                            _this.money = data.data.money;
+                            _this.pv = data.data.pv;
+                            _this.uv = data.data.uv;
+                            _this.ip = data.data.ip;
+                            _this.download = data.data.download;//下载量
+                            _this.user_name = data.data.user_name;//用户名
+                        }
+                    },
+                })
+            },
+            /*切换状态*/
+            tipsCut: function (item, enable) {
+                var parmars = {
+                    id: item.id,
+                    enable: enable,
+                };
+                var formData = new FormData();
+                for (var key in parmars) {
+                    var value = parmars[key];
+                    formData.append(key, value);
+                }
+                //console.log(parmars);
+                // 启用状态
+                $.ajax({
+                        url: '/signature/app/enable',
+                        type: 'post',
+                        contentType: "application/x-www-form-urlencoded",
+                        dataType: "json",
+                        timeout: 30000,
+                        data: formData,
+                        processData: false,//data数据是否转为字符串数据
+                        contentType: false,
+                        success: function (data) {
+                            if (data.code == 0) {
+                                _this.getData();
+                            } else {
+                            }
+                        },
+                    }
+                )
+            },
+            /*删除*/
+            deleteApp: function (item) {
+                layer.confirm('确定删除应用 ' + item.title + '？', {
+                    btn: ['确定', '取消'] //按钮
+                }, function () {
+                    //确定
+                    var parmars = {
+                        id: item.id
+                    };
+                    var formData = new FormData();
+                    for (var key in parmars) {
+                        var value = parmars[key];
+                        formData.append(key, value);
+                    }
+                    $.ajax({
+                            url: '/signature/app/delete',
+                            type: 'post',
+                            contentType: "application/x-www-form-urlencoded",
+                            dataType: "json",
+                            timeout: 30000,
+                            data: formData,
+                            processData: false,//data数据是否转为字符串数据
+                            contentType: false,
+                            success: function (data) {
+                                if (data.code == 0) {
+                                    window.location.href = "/main";
+                                } else {
+                                }
+                            },
+                        }
+                    )
+                }, function () {
+                    //取消
+                });
+            },
+        	updateApk: function(item){
+        		var appId = $(item.target).attr("data");
+        		console.log(appId);
+				layer.open({
+					title: "上传文件",
+					content: '<input id="apkfile123" name="uploadFile" onchange="vueObj.apkfileUp(event,'+appId+');" type="file"/>',
+					btn: ['上传','关闭'],
+					yes: function(index,layero){
+						vueObj.apkfileUp(appId);
+					},
+					btn2: function(index,layero){
+						console.log('2:'+appId);
+					}
+				});
+        	},
+            fileInfo: function (item) {
+                this.fileUpShow = true;//显示弹框信息
+                this.is_set = true;
+                this.fileData = item;//上传信息
+            },
+            fileUp: function () {
+                this.fileUpShow = true;//显示弹框信息
+                $('.file-manager').show();
+                $('.file-one-bottom').show();
+                $('.file-one-top').show();
+                $('.file-one-select').show();
+                $('.file-one-select-text').show();
+                this.newFile();
+                $('#thelist').empty();
+                _this.is_select = false;
+                this.is_set = false;
+                this.fileData = null;//上传信息
+            },
+            fileClear: function () {
+                this.fileUpShow = false;//显示弹框信息
+                this.fileData = null;//上传信息
+            },
+            delFileImg: function () {
+                _this.fileData.showIconUrl = null;
+            },
+            delFilePic: function () {
+                _this.fileData.showPicUrl = null;
+            },
+            //截图
+            filePicUp: function ($event) {
+                var file = $event.currentTarget.files[0];
+                var obj = document.getElementById('filePic');
+                obj.select();
+                var formData = new FormData();
+                formData.append('file', file);
+                $.ajax({
+                        url: '/signature/app/upappscreen',
+                        type: 'post',
+                        //contentType: "multipart/form-data",
+                        dataType: "json",
+                        //timeout: 0,
+                        data: formData,
+                        processData: false,//data数据是否转为字符串数据
+                        contentType: false,
+                        success: function (data) {
+                            console.log(data)
+                            if (data.code == 0) {
+                                _this.fileData.showPicUrl = data.url;
+                            } else {
+                                layer.msg('上传应用截图失败')
+                            }
+                        },
+                        error: function (xhr, textStatus) {
+                            layer.msg('上传应用截图失败')
+                        }
+                    }
+                )
+            },
+            checkDomain: function (e) {
+                var domain = e.target.value;
+                var formData = new FormData();
+                formData.append("domain", domain);
+                $.ajax({
+                    url: '/signature/app/checkdomain',
+                    type: 'post',
+                    contentType: "application/x-www-form-urlencoded",
+                    dataType: "json",
+                    timeout: 30000,
+                    data: formData,
+                    processData: false,//data数据是否转为字符串数据
+                    contentType: false,
+                    success: function (data) {
+                        if (data.code == 0) {
+                            $(e.target).removeClass('check');
+                        } else {
+                            $(e.target).addClass('check');
+                            layer.msg(data.msg)
+                        }
+                    },
+                    error: function (xhr, textStatus) {
+                        layer.msg('网络异常')
+                    }
+                })
+            },
+            //复制规则
+            selectText: function (textbox, startIndex, stopIndex) {
+                if (textbox.createTextRange) {//ie
+                    const range = textbox.createTextRange();
+                    range.collapse(true);
+                    range.moveStart('character', startIndex);//起始光标
+                    range.moveEnd('character', stopIndex - startIndex);//结束光标
+                    range.select();//不兼容苹果
+                } else {//firefox/chrome
+                    textbox.setSelectionRange(startIndex, stopIndex);
+                    textbox.focus();
+                }
+            },
+            copyText: function (item) {
+            	var text = "推广地址:"+item.link
+            	text += " 后台地址:"+document.domain + "/login";
+         		text += " 应用名:"+item.title;
+         		text += " 账号:"+ _this.user_name;
+         		text += " 密码:";
+                var input = document.querySelector('#copy-input');
+                if (!input) {
+                    input = document.createElement('input');
+                    input.id = "copy-input";
+                    input.readOnly = "readOnly";        // 防止ios聚焦触发键盘事件
+                    input.style.position = "absolute";
+                    input.style.left = "-1000px";
+                    input.style.zIndex = "-1000";
+                    document.body.appendChild(input)
+                }
+                input.value = text+'';
+                // ios必须先选中文字且不支持 input.select();
+                _this.selectText(input, 0, text.length);
+                input.select();
+                if (document.execCommand('copy')) {
+                    document.execCommand('copy');
+                    layer.msg('已复制到粘贴板');
+                }
+                input.blur();
+            },
+            //icon
+            fileImgUp: function ($event) {
+                var file = $event.currentTarget.files[0];
+                var obj = document.getElementById('fileImg');
+                obj.select();
+                var formData = new FormData();
+                formData.append('file', file);
+                $.ajax({
+                        url: '/signature/app/updateicon',
+                        type: 'post',
+                        //contentType: "multipart/form-data",
+                        dataType: "json",
+                        //timeout: 0,
+                        data: formData,
+                        processData: false,//data数据是否转为字符串数据
+                        contentType: false,
+                        success: function (data) {
+                            console.log(data)
+                            if (data.code == 0) {
+                                _this.fileData.showIconUrl = data.url;
+                            } else {
+                                layer.msg('上传图片失败')
+                            }
+                        },
+                        error: function (xhr, textStatus) {
+                            layer.msg('上传图片失败')
+                        }
+                    }
+                )
+            },
+            newFile: function () {
+                var $ = jQuery,
+                    $list = $('#thelist'),
+                    state = 'pending',
+                    uploader,
+                    uploader = WebUploader.create({
+                        // 不压缩image
+                        resize: false,
+                        // swf文件路径
+                        swf: 'https://cdn.bootcss.com/webuploader/0.1.1/Uploader.swf',
+                        // 文件接收服务端。
+                        //server: '/signature/app/upload',
+                        server: '/signature/app/uploadipa',
+                        chunked: false,//是否分片
+                        // 分片大小
+                        chunkSize: 1024 * 1024 * 1024 * 2,   //2048M
+                        //最大上传的文件数量, 总文件大小,单个文件大小(单位字节);
+                        fileNumLimit: 1,
+                        fileSizeLimit: 2000 * 1024 * 1024, //2G
+                        fileSingleSizeLimit: 2000 * 1024 * 1024,  //2G
+                        // 选择文件的按钮。可选。
+                        // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+                        pick: '#fileApp',
+                        accept: {
+                            title: '安装包',
+                            extensions: 'ipa',
+                        },
+                        duplicate: false //防止多次上传
+                    });
+                // 当有文件添加进来的时候
+                uploader.on('fileQueued', function (file) {
+                    $list.append('<div id="' + file.id + '" class="item" style="margin-top: 10px">' +
+                        '<span class="info">' + file.name + '</span>' +
+                        '<span class="state" style="margin-left: 20px">等待上传...</span>' +
+                        '</div>');
+                    if (file) {
+                        if (state === 'uploading') {
+                            uploader.stop();
+                        } else {
+                            uploader.upload();
+                        }
+                    }
+                });
+                // 文件上传过程中创建进度条实时显示。
+                uploader.on('uploadProgress', function (file, percentage) {
+                    $('.file-manager').hide();//隐藏上传
+                    $('.file-one-bottom').hide();
+                    $('.file-one-top').hide();
+                    $('.file-one-select').hide();
+                    $('.file-one-select-text').hide();
+                    $('#' + file.id).html('');
+                    var $li = $('#' + file.id),
+                        $percent = $li.find('.progress .progress-bar');
+                    // 避免重复创建
+                    if (!$percent.length) {
+                        $percent = $('<div style="width: 360px; height: 20px; z-index: 20000;text-align: center;">\n' +
+                            '                        <div class="progress progress-striped active" style="margin-bottom: 0;padding-right: 20px">\n' +
+                            '                            <div class="progress-bar progress-bar-info progress-bar-striped active" id="pb" style="width: 0%;">\n' +
+                            '                                <div class="progress-value" id="pb-text">0%</div>\n' +
+                            '                            </div>\n' +
+                            '                        </div>\n' +
+                            '</div>').appendTo($li).find('.progress-bar');
+                    }
+
+
+                    $li.find('p.state').text('上传中');
+
+                    /*$percent.css('width', percentage * 100 + '%');
+                    $percent.css('height', '10px');*/
+                    $('#pb').css('width', percentage * 100 + '%');
+                    $('#pb-text').text((percentage * 100).toString().substr(0, 5) + '%');
+
+                    $percent.css('margin-bottom', '20px');
+                });
+
+                uploader.on('uploadSuccess', function (file, response) {
+                    console.log(response);
+                    if (response.code == 0) {
+                        layer.msg('上传文件成功')
+                        _this.fileData = response.data;
+                        _this.fileData.select = 1;
+                        _this.fileData.installType  = 1;
+                        _this.fileData.appType = 1;
+                        _this.fileData.num = 5;
+                    } else {
+                        layer.msg('上传文件失败')
+                    }
+                    //成功
+                    var fileinfojson = response._raw;//上传图片路径
+                });
+
+                uploader.on('uploadError', function (file) {
+                    $('#' + file.id).find('p.state').text('上传出错');
+                });
+
+                uploader.on('uploadComplete', function (file) {
+                    $('#' + file.id).find('.progress').fadeOut();
+                });
+
+                uploader.on('all', function (type) {
+                    console.log(type)
+                    if (type === 'startUpload') {
+                        state = 'uploading';
+                    } else if (type === 'stopUpload') {
+                        state = 'paused';
+                    } else if (type === 'uploadFinished') {
+                        state = 'done';
+                    }
+                });
+
+            },
+            /*上传*/
+            apkfileUp: function ($event, appId) {
+                var file = $event.currentTarget.files[0];
+                //读取数据
+                if (file) {
+                    if (file.size > 1000 * 1024 * 1024 * 2) {
+                        layer.msg('文件不能超过2G')
+                        return
+                    }
+                } else {
+                    layer.msg('文件获取异常~')
+                    return
+                }
+                var obj = document.getElementById('apkfile123');
+                obj.select();
+                layer.load(1, {
+                    icon: 0,
+                    shade: [0.7, '#fff'],
+                });
+                // 上传应用
+                var formData = new FormData();
+                formData.append('file', file);
+                formData.append('apptype','1');
+                if (appId > 0) {
+                    formData.append('appid', appId);
+                }
+                $.ajax({
+                        url: '/signature/app/updateapk',
+                        type: 'post',
+                        //contentType: "multipart/form-data",
+                        dataType: "json",
+                        //timeout: 0,
+                        data: formData,
+                        processData: false,//data数据是否转为字符串数据
+                        contentType: false,
+                        success: function (data) {
+                            console.log(data)
+                            if (data.code == 0) {
+                                layer.closeAll();
+                                layer.msg('上传文件成功')
+                                _this.fileData = data.data;
+                            } else {
+                                layer.msg('上传文件失败')
+                            }
+                        },
+                        error: function (xhr, textStatus) {
+                            layer.msg('上传文件失败')
+                        }
+                    }
+                )
+            },
+            /*上传*/
+            fileDataUp: function ($event, appId) {
+                var file = $event.currentTarget.files[0];
+                //读取数据
+                if (file) {
+                    if (file.size > 1000 * 1024 * 1024 * 2) {
+                        layer.msg('文件不能超过2G')
+                        return
+                    }
+                } else {
+                    layer.msg('文件获取异常~')
+                    return
+                }
+                var obj = document.getElementById('file');
+                obj.select();
+                layer.load(1, {
+                    icon: 0,
+                    shade: [0.7, '#fff'],
+                });
+                // 上传应用
+                var formData = new FormData();
+                formData.append('file', file);
+                formData.append('apptype','1');
+                if (appId > 0) {
+                    formData.append('appid', appId);
+                }
+                $.ajax({
+                        url: '/signature/app/updateipa',
+                        type: 'post',
+                        //contentType: "multipart/form-data",
+                        dataType: "json",
+                        //timeout: 0,
+                        data: formData,
+                        processData: false,//data数据是否转为字符串数据
+                        contentType: false,
+                        success: function (data) {
+                            console.log(data)
+                            if (data.code == 0) {
+                                layer.closeAll();
+                                layer.msg('上传文件成功')
+                                _this.fileData = data.data;
+                            } else {
+                                layer.msg('上传文件失败')
+                            }
+                        },
+                        error: function (xhr, textStatus) {
+                            layer.msg('上传文件失败')
+                        }
+                    }
+                )
+            },
+            /*提交*/
+            sumbitFile: function () {
+                if (!_this.fileData.select) {
+                    layer.msg('请输入应用类别')
+                    return
+                }
+                _this.fileData.num = parseInt(_this.fileData.num)
+                if (!(_this.fileData.num <= 5)) {
+                    layer.msg('评分不大于5')
+                    return
+                }
+                var parmars = _this.fileData;
+                var formData = new FormData();
+                for (var key in parmars) {
+                    var value = parmars[key];
+                    formData.append(key, value);
+                }
+
+                console.log(_this.fileData);
+                // 提交应用信息
+                $.ajax({
+                    url: '/signature/app/' + _this.fileData.id + '/upappinfo',
+                    type: 'post',
+                    contentType: "application/x-www-form-urlencoded",
+                    dataType: "json",
+                    timeout: 30000,
+                    data: formData,
+                    processData: false,//data数据是否转为字符串数据
+                    contentType: false,
+                    success: function (data) {
+                        if (data.code == 0) {
+                            layer.msg('发布应用成功')
+                            _this.fileClear();
+                            _this.getData();
+                        } else {
+                            layer.msg('发布应用失败')
+                        }
+                    },
+                    error: function (xhr, textStatus) {
+                        layer.msg('发布应用失败')
+                    }
+                })
+            },
+            coolGM: function () {
+                return
+                layer.open({
+                    type: 1,
+                    closeBtn: 2, //不显示关闭按钮
+                    title: '联系客服',
+                    anim: 2,
+                    area: ['420px', '240px'], //宽高
+                    shadeClose: true, //开启遮罩关闭
+                    content: '<div style="padding-top: 40px">\n' +
+                        '<div class="flex-row-center" style="justify-content: center;">\n' +
+                        '        <div class="flex-row-center" id="wx_code" onclick="wxShow()" target="_blank"\n' +
+                        '           style="text-decoration: none;flex-direction: column;justify-content: center;border-radius:4px;background:#fdfdfd;' +
+                        'width: 80px;height: 80px;margin: 0px 10px;box-shadow:0 2px 6px 0 rgba(154, 167, 179, 0.4);"\n' +
+                        '           href="">\n' +
+                        '            <svg t="1564661544308" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="12890" width="32" height="32"><path d="M1024 619.52c0-143.36-138.24-256-307.2-256s-307.2 112.64-307.2 256 138.24 256 307.2 256c30.72 0 61.44-5.12 92.16-10.24l97.28 51.2-25.6-76.8c87.04-51.2 143.36-128 143.36-220.16z m-414.72-40.96c-30.72 0-51.2-20.48-51.2-51.2s20.48-51.2 51.2-51.2 51.2 20.48 51.2 51.2c0 25.6-25.6 51.2-51.2 51.2z m209.92 0c-30.72 0-51.2-20.48-51.2-51.2s20.48-51.2 51.2-51.2 51.2 20.48 51.2 51.2c0 25.6-25.6 51.2-51.2 51.2z" fill="#4CBF00" p-id="12891"></path><path d="M358.4 609.28c0-158.72 153.6-286.72 348.16-286.72h15.36c-40.96-133.12-179.2-235.52-353.28-235.52-204.8 0-368.64 138.24-368.64 307.2 0 107.52 66.56 204.8 168.96 256l-30.72 92.16L256 686.08c35.84 10.24 71.68 15.36 112.64 15.36h10.24c-15.36-30.72-20.48-61.44-20.48-92.16z m138.24-414.72c35.84 0 66.56 30.72 66.56 66.56s-30.72 66.56-66.56 66.56C460.8 322.56 430.08 291.84 430.08 256S460.8 194.56 496.64 194.56zM245.76 322.56c-35.84 0-61.44-30.72-61.44-66.56s30.72-66.56 66.56-66.56 61.44 30.72 61.44 66.56-30.72 66.56-66.56 66.56z" fill="#4CBF00" p-id="12892"></path></svg>' +
+                        '            <div style="font-size: 12px;text-align: center;margin-top: 5px;color:#62b900">微信号</div>\n' +
+                        '        </div>\n' +
+                        '        <a class="flex-row-center" target="_blank"\n' +
+                        '           style="text-decoration: none;flex-direction: column;justify-content: center;border-radius:4px;background:#fdfdfd;' +
+                        'width: 80px;height: 80px;margin: 0px 10px;box-shadow:0 2px 6px 0 rgba(154, 167, 179, 0.4); "\n' +
+                        '           >\n' +
+                        '            <svg t="1564657127261" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="11308" width="32" height="32">\n' +
+                        '                <path d="M514.218667 770.104889c4.664889 0 18.289778-0.312889 23.068444-0.853333 45.767111 0 83.768889-26.311111 98.986667-64.512a6.627556 6.627556 0 0 0-3.640889-8.163556 6.912 6.912 0 0 0-8.675556 2.730667c-0.170667 0.312889-32.597333 25.372444-89.144889 25.372444-10.609778 1.422222-20.935111 0.398222-30.72 0.398222-49.607111-0.056889-71.708444-19.399111-71.879111-19.569777-2.503111-2.190222-6.343111-2.247111-8.903111-0.113778s-3.157333 5.831111-1.393778 8.675555c14.506667 24.775111 51.484444 56.035556 92.302223 56.035556z m325.831111-167.736889a342.926222 342.926222 0 0 1-162.56 194.901333c-2.816 1.479111-15.388444-1.450667-9.073778-8.248889l0.312889-0.284444c75.776-68.437333 80.440889-135.367111 72.106667-233.045333-7.281778-85.418667-57.941333-166.456889-83.512889-203.036445l-1.792 1.080889a7.964444 7.964444 0 0 0-14.307556 3.384889c-2.673778 25.315556-8.476444 42.865778-12.515555 51.541333-17.208889 37.148444-45.397333 59.420444-86.556445 66.844445-64.824889 11.690667-129.308444 25.258667-194.104889 37.148444-40.391111 7.452444-75.064889 52.280889-68.266666 97.934222 15.388444 103.708444 86.499556 178.062222 106.211555 192.568889-0.597333-0.426667-2.56 6.968889-11.491555 7.879111a344.547556 344.547556 0 0 1-185.315556-192.341333c-23.665778-73.614222-24.405333-145.066667 0.056889-240.526222a344.632889 344.632889 0 0 1 322.56-221.44c148.366222 0 274.488889 92.956444 323.157333 223.061333 13.994667 45.283556 30.264889 129.877333 5.091556 222.577778z m-465.550222 208.64c-0.056889 0.056889-0.056889 0.056889 0 0z" fill="#FE919D" p-id="11309"></path><path d="M824.888889 583.111111c0 22.215111 21.248 43.662222 51.342222 46.108445-31.601778 139.264-159.886222 254.890667-318.805333 268.117333-9.528889-22.897778-32.938667-39.111111-60.472889-39.111111-35.982222 0-65.109333 27.562667-65.109333 61.553778s29.127111 61.525333 65.109333 61.525333c28.984889 0 53.276444-18.033778 61.696-42.808889 183.950222-14.506667 331.406222-148.792889 362.183111-313.344 27.164444-10.979556 46.279111-36.807111 46.279111-66.986667v-143.587555c0-40.135111-33.820444-72.675556-75.548444-72.675556-0.597333 0-1.194667 0.113778-1.792 0.113778-40.874667-171.434667-197.12-299.320889-384.455111-299.320889-192.512 0-352.312889 134.940444-387.754667 313.486222C83.114667 362.154667 56.888889 391.509333 56.888889 426.951111v141.880889c0 39.765333 32.938667 72.049778 73.614222 72.049778C153.457778 640.881778 199.111111 611.271111 199.111111 583.111111v-142.222222c0-35.555556-2.332444-60.16-19.911111-67.072 27.420444-152.348444 162.844444-268.231111 326.115556-268.231111 162.474667 0 297.472 114.716444 325.802666 266.040889-2.816 3.612444-7.736889 30.464-6.229333 40.817777 1.507556 10.382222 0 154.368 0 170.666667z" fill="#FC5766" p-id="11310"></path>\n' +
+                        '            </svg>\n' +
+                        '            <div style="font-size: 12px;text-align: center;margin-top: 5px;color:hotpink">人工客服</div>\n' +
+                        '        </a>\n' +
+                        '        <div class="flex-row-center" id="phone_code" onclick="phoneShow()" target="_blank"\n' +
+                        '           style="text-decoration: none;flex-direction: column;justify-content: center;border-radius:4px;background:#fdfdfd;' +
+                        'width: 80px;height: 80px;margin: 0px 10px;box-shadow:0 2px 6px 0 rgba(154, 167, 179, 0.4);"\n' +
+                        '           href="">\n' +
+                        '            <svg t="1564661673467" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="13861" width="32" height="32"><path d="M419.6 344l-88 89.6c45.8 101.7 143 215 255.7 253.1l76.1-75.8s180.3 31.5 220.8 51.1c35.2 17 46.8 54.8 41.3 101.4-5.8 50.1-71.5 160.5-189.7 161.7-118.2 1.2-292.3-87.9-417-219.2-124.7-131.5-235.9-298.1-218-439.5C118.5 124.9 241.7 99.6 272.5 97.3c31.2-2.3 55.9 6.8 74.7 30.1 24.2 30.1 72.4 216.6 72.4 216.6z" fill="#1375FF" p-id="13862"></path></svg>' +
+                        '            <div style="font-size: 12px;text-align: center;margin-top: 5px;color:#2a9ff6">联系电话</div>\n' +
+                        '        </div>\n' +
+                        '        </div>\n' +
+                        '        <div class="data-bottom-view-title" style="margin-top: 20px">如需账户充值，请联系客服处理</div>\n' +
+                        '    </div>',
+                });
+            },
+        },
+        mounted() {
+            _this = this;
+            this.getData();
+        },
+    })
+
+    function wxShow() {
+        layer.tips('微信号：', '#wx_code', {
+            tips: [3, '#62b900']
+        });
+    }
+
+    function phoneShow() {
+        layer.tips('电话：', '#phone_code', {
+            tips: [3, '#2a9ff6']
+        });
+    }
+
+</script>
+</html>

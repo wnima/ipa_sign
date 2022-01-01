@@ -1,0 +1,102 @@
+bootdo:
+    username: admin
+    password: 111111
+    uploadPath: ./uploaded_files/
+    cerPath: ./cer_files/
+    mobPath: ./mob_files/
+    loginApiHost: http://localhost:8080
+logging:
+    level:
+        com:
+            bootdo: info
+        root: info
+mybatis:
+    configuration:
+        map-underscore-to-camel-case: true
+    mapper-locations: mybatis/**/*Mapper.xml
+    typeAliasesPackage: com.bootdo.**.domain
+oss:
+    accessKeyId:
+    accessKeySecret:
+    imgbucketName:
+    imgendpoint: oss-cn-hangzhou-internal.aliyuncs.com
+    imgurlPrefix:
+    ipabucketName:
+    ipaendpoint: oss-cn-hangzhou-internal.aliyuncs.com
+    ipaurlPrefix:
+    effectiveTime: 2
+server:
+    port: 7050
+    session-timeout: 10800
+signature:
+    host:
+    bakhost:
+    scriptPath: /root/signature/
+    #signature: isign -c &&certificate -k &&key -p &&mobileprovision -o &&resigned &&original
+    signature: zsign -c &&certificate -k &&key -m &&mobileprovision -o &&resigned &&original
+    udid:
+        CACertificate: ./signature/CACertificate.pem
+        privateKeyCertificate: ./signature/privateKeyCertificate.key
+        publicCertificate: ./signature/publicCertificate.crt
+        templates: ./signature/udid.mobileconfig
+    updateDescription: ruby &&script/UpdateProfile.rb &&packageName &&udid &&iphoneName &&account &&password &&savepath &&descriptionName
+sms:
+    accesskeyid:
+    regionid: cn-hangzhou
+    secret:
+    signname:
+spring:
+    cache:
+        ehcache:
+            config: classpath:config/ehcache.xml
+        type: ehcache
+    datasource:
+        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+        driverClassName: com.mysql.jdbc.Driver
+        filters: stat,wall,slf4j
+        initialSize: 1
+        maxActive: 20
+        maxPoolPreparedStatementPerConnectionSize: 20
+        maxWait: 60000
+        minEvictableIdleTimeMillis: 30000
+        minIdle: 3
+        password: "688baf!5B"
+        poolPreparedStatements: true
+        testOnBorrow: false
+        testOnReturn: false
+        testWhileIdle: true
+        timeBetweenEvictionRunsMillis: 60000
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://127.0.0.1:3306/bootdo?useUnicode=true&characterEncoding=utf8
+        username: root
+        validationQuery: select 'x'
+    devtools:
+        restart:
+            enabled: false
+    jackson:
+        date-format: yyyy-MM-dd HH:mm:ss
+        time-zone: GMT+8
+    redis:
+        host: localhost
+        jedis:
+            pool:
+                max-active: 100
+                max-idle: 8
+                max-wait: -1
+                min-idle: 10
+        password: ''
+        port: 6379
+        timeout: 10000
+    resources:
+        static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:./templates/,file:./static/,file:./public/,file:./appicon/
+    servlet:
+        multipart:
+            max-file-size: 2048Mb
+            max-request-size: 2049Mb
+    thymeleaf:
+        cache: false
+        mode: LEGACYHTML5
+        prefix: file:./templates/
+subdomain:
+    match:
+        domains:

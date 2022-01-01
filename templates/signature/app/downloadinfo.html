@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>百度ECHarts</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link href="/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+<link href="/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+<link href="/css/animate.css" rel="stylesheet">
+<link href="/css/style.css?v=4.1.0" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+	<div class="row  border-bottom white-bg dashboard-header"></div>
+	<input type="hidden" id="data" th:value="${downloadData}">
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+
+						<div class="echarts" id="echarts-bar-chart"></div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<!-- 全局js -->
+	<script src="/js/jquery.min.js?v=2.1.4"></script>
+	<script src="/js/bootstrap.min.js?v=3.3.6"></script>
+
+	<!-- ECharts -->
+	<script src="/js/plugins/echarts/echarts-all.js"></script>
+
+	<!-- 自定义js -->
+	<script src="/js/content.js?v=1.0.0"></script>
+
+
+	<!-- ECharts demo data -->
+	<script type="text/javascript">
+	$(function () {
+	    var barChart = echarts.init(document.getElementById("echarts-bar-chart"));
+	    var download = document.getElementById("data").value;
+	    console.log(download);
+	    var baroption = {
+	        title : {
+	            text: '一周内下载量'
+	        },
+	        color: ['#3398DB'],
+	        tooltip : {
+	            trigger: 'axis',
+	            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+	                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+	            }
+	        },
+	        grid: {
+	            left: '3%',
+	            right: '4%',
+	            bottom: '3%',
+	            containLabel: true
+	        },
+	        xAxis : [
+	            {
+	                type : 'category',
+	                data : download["date"],
+	                axisTick: {
+	                    alignWithLabel: true
+	                }
+	            }
+	        ],
+	        yAxis : [
+	            {
+	                type : 'value'
+	            }
+	        ],
+	        series : [
+	            {
+	                name:'直接访问',
+	                type:'bar',
+	                barWidth: '60%',
+	                data: download["data"]
+	            }
+	        ]
+	    };
+	    barChart.setOption(baroption);
+	    window.onresize = barChart.resize;
+
+	});
+
+	</script>
+
+
+</body>
+
+</html>

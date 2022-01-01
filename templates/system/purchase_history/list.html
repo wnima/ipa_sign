@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>消费统计</title>
+    <link href="../css/layui.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+    <script src="../js/layui/layui.js"></script>
+    <script src="https://cdn.bootcss.com/webuploader/0.1.1/webuploader.html5only.min.js"></script>
+    <style>
+        .flex-row-center {
+            flex-direction: row;
+            display: flex;
+            align-items: center;
+        }
+
+        html, body, div {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgb(235, 237, 242);
+        }
+
+        .list-view {
+            height: 100%;
+            width: 100%;
+        }
+
+        .list-top {
+            padding: 30px 30px 0px 30px;
+
+        }
+
+        .list-top-title {
+            color: #5a5959;
+            font-size: 16px;
+        }
+
+        .list-top-data {
+            margin-top: 20px;
+            /* height: 300px;*/
+            width: auto;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px 0 rgba(154, 167, 179, 0.1);
+        }
+
+        .list-top-data-top {
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            background: rgb(245, 246, 248);
+            height: 180px;
+        }
+
+        .list-top-data-bottom {
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            background: #fff;
+            height: 120px;
+        }
+
+        .list-top-data-bottom-view {
+            flex: 1;
+            padding: 10px;
+        }
+
+        .data-bottom-view-title {
+            color: #adb1b6;
+            font-size: 14px;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+
+        .data-bottom-view-num {
+            font-size: 26px;
+            color: #45474a;
+            font-weight: 400;
+            text-align: center;
+        }
+
+        .list-data {
+            padding: 30px;
+            height: auto;
+            width: auto;
+        }
+
+        .list-data-list {
+            margin-top: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px 0 rgba(154, 167, 179, 0.1);
+        }
+
+        .list-data-top {
+            height: 60px;
+            color: #adb1b6;
+            font-weight: 400;
+            font-size: 14px;
+            background: rgb(245, 246, 248);
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .list-data-top div {
+            margin-left: 20px;
+            flex: 1;
+        }
+
+        .list-data-data {
+            height: auto;
+            background: #fff;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+
+        .list-data-view {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            font-size: 14px;
+            color: #354052;
+            height: 60px;
+        }
+
+        .list-data-view div {
+            margin-left: 20px;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .max-80 {
+            max-width: 80px;
+        }
+
+        .max-120 {
+            max-width: 120px;
+        }
+
+        .max-150 {
+            max-width: 150px;
+        }
+    </style>
+</head>
+<body>
+<!--列表-->
+<div class="list-view">
+    <div class="list-data">
+        <div class="list-top-title flex-row-center">消费统计
+            <div style="flex:1">
+            </div>
+        </div>
+        <div class="list-data-list">
+            <div class="list-data-top">
+                <div style="flex:1">应用名称</div>
+                <div style="flex:1">包名</div>
+                <div style="flex:1">标记</div>
+                <div style="flex:1">说明</div>
+                <div style="flex:1">账期</div>
+            </div>
+            <div class="list-data-data">
+                <div class="list-data-view" v-for="iterStat in list">
+                    <div>{{iterStat.appName}}</div>
+                    <div>{{iterStat.package}}</div>
+                    <div>{{iterStat.udid}}</div>
+                    <div>{{iterStat.details}}</div>
+                    <div>{{iterStat.time}}</div>
+                </div>
+            </div>
+        </div>
+        <div style="display: flex;flex-direction: row">
+            <div style="flex:1"></div>
+            <div id="page" style="padding-right: 10px"></div>
+        </div>
+    </div>
+</div>
+<script>
+    var _this = null;
+    var layer;
+    layui.use('layer', function () {
+        layer = layui.layer;
+    });
+    new Vue({
+        el: '.list-view',
+        data: {
+            //数量
+            list: [],
+            page: 1,//页码
+            limit: 20,//页长
+            count: 0,//总数
+            fileData: null,
+            fileUpShow: false,//显示弹框信息
+        },
+        methods: {
+            toTime: function (time) {
+                time = time * 1000
+                var t = new Date(time);
+                var tf = function (i) {
+                    return (i < 10 ? '0' : '') + i
+                };
+                return 'yyyy-MM-dd HH:mm:ss'.replace(/yyyy|MM|dd|HH|mm|ss/g, function (a) {
+                    switch (a) {
+                        case 'yyyy':
+                            return tf(t.getFullYear());
+                            break;
+                        case 'MM':
+                            return tf(t.getMonth() + 1);
+                            break;
+                        case 'mm':
+                            return tf(t.getMinutes());
+                            break;
+                        case 'dd':
+                            return tf(t.getDate());
+                            break;
+                        case 'HH':
+                            return tf(t.getHours());
+                            break;
+                        case 'ss':
+                            return tf(t.getSeconds());
+                            break;
+                    }
+                })
+            },
+            toNum: function (num) {
+                num = parseInt(num);
+                if (num === 0) {
+                    return '0.00'
+                }
+                if (num == '') {
+                    return num
+                }
+                var leng = num.toString().length;
+                if (leng == 2) {
+                    num = '0.'.concat(num);
+                    return num
+                } else if (leng == 1) {
+                    num = '0.0'.concat(num);
+                    return num
+                } else {
+                    var a = num.toString().substring(0, leng - 2);
+                    var b = num.toString().substring(leng - 2, leng);
+                    var sum = a.concat('.').concat(b);
+                    return sum
+                }
+            },
+            //复制规则
+            selectText: function (textbox, startIndex, stopIndex) {
+                if (textbox.createTextRange) {//ie
+                    const range = textbox.createTextRange();
+                    range.collapse(true);
+                    range.moveStart('character', startIndex);//起始光标
+                    range.moveEnd('character', stopIndex - startIndex);//结束光标
+                    range.select();//不兼容苹果
+                } else {//firefox/chrome
+                    textbox.setSelectionRange(startIndex, stopIndex);
+                    textbox.focus();
+                }
+            },
+            //复制内容
+            copyText: function (item) {
+                var text = item;
+                let input = document.querySelector('#copy-input');
+                if (!input) {
+                    input = document.createElement('input');
+                    input.id = "copy-input";
+                    input.readOnly = "readOnly";        // 防止ios聚焦触发键盘事件
+                    input.style.position = "absolute";
+                    input.style.left = "-1000px";
+                    input.style.zIndex = "-1000";
+                    document.body.appendChild(input)
+                }
+                input.value = text;
+                // ios必须先选中文字且不支持 input.select();
+                _this.selectText(input, 0, text.length);
+                console.log(document.execCommand('copy'), 'execCommand');
+                if (document.execCommand('copy')) {
+                    document.execCommand('copy');
+                    layer.msg('已复制到粘贴板');
+                }
+                input.blur();
+            },
+            /*列表*/
+            getData: function (page, type) {
+                // 列表
+                var num = _this.page
+                if (page) {
+                    num = page;
+                }
+                var parmars = {f: num, n: _this.limit,};
+                var formData = new FormData();
+                for (var key in parmars) {
+                    var value = parmars[key];
+                    formData.append(key, value);
+                }
+                $.ajax({
+                    url: '/system/purchase_history/list',
+                    type: 'post',
+                    contentType: "application/x-www-form-urlencoded",
+                    dataType: "json",
+                    timeout: 30000,
+                    data: formData,
+                    processData: false,//data数据是否转为字符串数据
+                    contentType: false,
+                    success: function (data) {
+                        if (data.code == 0) {
+                            if (data.list.length) {
+                                _this.list = data.list;//列表数据
+                                _this.count = data.count;
+                                _this.page = num;
+                                if (type) {
+                                    layui.use('laypage', function () {
+                                        var laypage = layui.laypage;
+                                        laypage.render({
+                                            elem: 'page' //注意，这里的 test1 是 ID，不用加 # 号
+                                            , count: _this.count //数据总数，从服务端得到
+                                            , limit: 20
+                                            , theme: '#1e90ff'
+                                            , layout: ['prev', 'page', 'next', 'count']
+                                            , jump: function (obj, first) {
+                                                if (!first) {
+                                                    _this.getData(obj.curr)
+                                                }
+                                            }
+                                        });
+                                    })
+                                }
+                            }
+                        }
+                    },
+                })
+            },
+        },
+        mounted() {
+            _this = this;
+            _this.getData(1, true);
+        },
+    })
+
+</script>
+</body>
+</html>

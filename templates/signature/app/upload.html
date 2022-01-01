@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>应用上传</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/layui.css" rel="stylesheet">
+    <link href="/css/style.css?v=4.1.0" rel="stylesheet">
+    <style>
+        .aactive {
+            color: #13b5b7 !important;
+        }
+        .hactive:hover{
+            color: #13b5b7 !important;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content" id="app">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="file-manager">
+                        <button type="button" class="layui-btn" id="test1">
+                            <i class="fa fa-cloud"></i>上传文件
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 全局js -->
+<script src="/js/jquery.min.js?v=2.1.4"></script>
+<script src="/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="/js/bootstrap-paginator.min.js"></script>
+
+<script src="/js/content.js?v=1.0.0"></script>
+<script src="/js/layui.js"></script>
+<script src="/js/plugins/clipboard/clipboard.min.js"></script>
+<script src="/js/plugins/layer/layer.min.js"></script>
+<script src="/js/vue.min.js"></script>
+
+<script type="text/javascript">
+    var clipboard = new Clipboard('button.copy', {
+        text: function (trigger) {
+            layer.msg('文件路径已复制到粘贴板');
+            return $(trigger).attr('url');
+        }
+    });
+    layui.use('upload', function () {
+        var upload = layui.upload;
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#test1', //绑定元素
+            url: '/signature/app/upload', //上传接口
+            size: 0,
+            accept: 'file',
+            done: function (r) {
+                layer.msg(r.msg);
+                app.getData();
+            },
+            error: function (r) {
+                layer.msg(r.msg);
+            }
+        });
+    });
+
+    // function changeType(i) {
+    //     app.type = i;
+    //     app.offset = 0;
+    //     app.getData();
+    // }
+</script>
+</body>
+</html>

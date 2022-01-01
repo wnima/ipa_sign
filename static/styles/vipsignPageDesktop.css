@@ -1,0 +1,185 @@
+    body {
+        position: relative;
+        padding-top: 60px;
+        font-weight:400;
+        font-family:PingFangSC-Regular;
+    }
+    .l-content-width {
+        margin: 0;
+        width: 100%;
+        display: inline;
+    }
+    #appdetails-icon {
+        width: 11vw;
+        display: inline-block;
+        float: left;
+    }
+    .app-profile {
+        margin-left: 30px;
+        float: left;
+        max-width: 28vw;
+    }
+    .app-name {
+        font-size: 20px;
+    }
+    span.app-restrict {
+        border:1px solid rgba(142,142,147,1);
+        border-radius:3px;
+        padding: 1px 12px;
+        font-size: 13px;
+        align-self: center;
+        color: #8E8E93;
+    }
+    p.app-title{
+    }
+    p.app-title,
+    p.update-description {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+    p.app-price {
+        font-size:12px;
+        color:rgba(51,51,51,1);
+        line-height:28px;
+        margin-top: 20px;
+    }
+    .app-rating {
+        margin-top: 40px;
+    }
+    .ios-caption-subtitle {
+        color: #8e8e93;
+        font-size: 12px;
+        margin: 5px 0;
+    }
+    p.app-description {
+        font-size:16px;
+        color:rgba(142,142,147,1);
+        line-height:28px;
+    }
+    .app-qrcode {
+        width: 8.5vw;
+        float: right;
+        float: right;
+        border: 1px solid rgba(233,233,233,1);
+        padding-top: 20px;
+    }
+    .app-qrcode>img {
+        width: 7vw;
+        margin: auto;
+    }
+    p.scan-tips {
+        font-size:14px;
+        margin: 15px 0 20px 0;
+        color: #8E8E93;;
+    }
+    #screenshotTableContainer{
+        overflow: scroll;
+        display: flex;
+        width: 100%;
+        margin: 0;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling:touch;
+    }
+    .col-md-2.col-sm-3.col-xs-6.delete:not(:last-child) {
+        width: auto;
+        padding-right: 20px;
+        padding-left: 0;
+    }
+    .col-md-2.col-sm-3.col-xs-6.delete:last-child {
+        padding:0;
+    }
+    #screenshotTableContainer .delete:first-child{
+        padding-left: 0;
+    }
+    #screenshotTableContainer .screenshot-item{
+        background-size: contain;
+        background-repeat: no-repeat;
+        height: 497px;
+        width: 228px;
+        border: 1px solid rgba(233,233,233,1);
+        border-radius: 23px;
+        background-position: center;
+    }
+    #screenshotTableContainer .screenshot-item>span.delete-filekey{
+        display:none;
+    }
+    p.update-description {
+        margin-top: 20px;
+    }
+    p.update-description>span.description-content {
+        font-size:12px;
+        color:rgba(51,51,51,1);
+    }
+    p.update-description>span.app-version{
+        font-size:12px;
+        color:rgba(142,142,147,1);
+    }
+    .ios-app-cust-ratings_stats {
+        margin: 0;
+        width: 23.04975%;
+    }
+    .ios-app-ratings-avg-disp {
+        display:inline;
+        margin-right: 7px;
+    }
+    .ios-app-ratings-bars {
+            width: 22%;
+            margin-left: 1.28358%;
+    }
+    .ios-app-cust-ratings {
+        margin-bottom: 60px;
+    }
+    .row-bottom-border {
+        border-bottom: none;
+        margin: 15px;
+    }
+    .ios-app-infor-list-row-val{
+        width: 80%;
+        text-align:left;
+        left: 20px;
+    }
+    .ios-app-infor-list-row-term {
+        width: 20%;
+        text-align:right;
+    }
+    .ios-app-infor-list-row-val,
+    .ios-app-infor-list-row-term {
+        margin:0;
+        display: inline-table;
+        position: relative;
+        color:rgba(51,51,51,1);
+    }
+    .ios-app-infor-list {
+        margin-bottom: 50px;
+    }
+    .app-rating-star i.fa.fa-star{
+        color: #FF9500;
+    }
+    .disclaimer {
+        width: 100vw;
+        padding-top: 30px;
+        padding-bottom: 50px;
+    }
+    #app-content,
+    .disclaimer>.disclaimer-content {
+        width: 980px;
+        margin:auto;
+    }
+    @media (max-width:768px) {
+        .app-qrcode {
+            width: 50vw;
+        }
+        .app-qrcode>img {
+            width: 17vw;
+        }
+    }
+    #adminQrCode:hover {
+        min-width: 8.5vw;
+        width: auto;
+        float: right;
+        position: absolute;
+        right: 0;
+        z-index: 1;
+        top: 0vw;
+    }

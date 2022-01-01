@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width,user-scalable=no,initial-scale=1">
+<title th:text="${result.app.applicationName}"></title>
+<meta property="og:type" content="website" />
+<meta property="og:title" th:content="${result.app.applicationName}">
+<meta property="og:description" th:content="${result.app.organizationName}">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+<link rel="shortcut icon"
+	th:href="${#strings.isEmpty(result.app.showIconUrl)?result.app.iconUrl:result.app.showIconUrl}" />
+<link rel="bookmark"
+	th:href="${#strings.isEmpty(result.app.showIconUrl)?result.app.iconUrl:result.app.showIconUrl}" />
+<link rel="stylesheet" href="/vendor/fontawesome/css/font-awesome.css" />
+<link rel="stylesheet" href="/styles/style.css">
+<link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.css" />
+<link rel="stylesheet" href="/styles/vipsignPage.css">
+<link rel="stylesheet" href="/styles/vipsignInstall.css">
+<script src="/vendor/jquery/dist/jquery.min.js"></script>
+<script
+	src="https://cdn.bootcss.com/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+<script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/vendor/switch/switch.js"></script>
+<script src="/scripts/appSetting.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+<style type="text/css">
+.progress {
+	height: 25px;
+	background: #262626;
+	padding: 5px;
+	overflow: visible;
+	border-radius: 20px;
+	border-top: 1px solid #000;
+	border-bottom: 1px solid #7992a8;
+	margin-top: 50px;
+}
+
+.progress .progress-bar {
+	border-radius: 20px;
+	position: relative;
+	animation: animate-positive 2s;
+}
+
+.progress .progress-value {
+	display: block;
+	padding: 3px 7px;
+	font-size: 13px;
+	color: #fff;
+	border-radius: 4px;
+	background: #191919;
+	border: 1px solid #000;
+	position: absolute;
+	top: -40px;
+	right: -10px;
+}
+
+.progress .progress-value:after {
+	content: "";
+	border-top: 10px solid #191919;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	position: absolute;
+	bottom: -6px;
+	left: 26%;
+}
+
+.progress-bar.active {
+	animation: reverse progress-bar-stripes 0.40s linear infinite,
+		animate-positive 2s;
+}
+
+@
+-webkit-keyframes animate-positive { 0% {
+	width: 0;
+}
+
+}
+@
+keyframes animate-positive { 0% {
+	width: 0;
+}
+
+}
+.ios-download-data {
+	position: relative;
+	border-radius: 15px;
+	height: 28px;
+	line-height: 28px;
+	border: 1px solid rgba(52, 120, 246, 1);
+	background: rgba(52, 120, 246, 1);
+	overflow: hidden;
+	min-width: 57px;
+	padding: 0px 10px;
+	z-index: 10;
+}
+
+.download-loading-data-text {
+	color: #fff;
+	font-size: 14px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	z-index: 90;
+}
+
+#loading-num {
+	padding-left: 10px;
+}
+
+.ios-download-data-back {
+	background: rgba(52, 120, 246, 1);
+	width: 0%;
+	height: 30px;
+	padding: 1px;
+	margin: -1px;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	bottom: 0px;
+	z-index: 1;
+	transition: width 0.5s;
+}
+
+.none {
+	display: none;
+}
+</style>
+
+<style type="text/css">
+    .rightValidate { width: 280px; margin: 0px auto; position: relative; line-height: 33px; height: 33px; text-align: center; z-index: 99; }
+    .v_rightBtn { position: absolute; left: 0; top: 0; height: 33px; width: 40px; background: #ddd; cursor: pointer; }
+    .imgBtn{ width:44px; height: 171px; position: absolute; left: 0;  }
+    .imgBtn img{ width:100%;z-index:99; }
+    .imgBg{ position:absolute;bottom:35px;width: 280px; height: 171px; box-shadow: 0px 4px 8px #3C5476; display:none;z-index:9;}
+    .hkinnerWrap{ border: 1px solid #eee; }
+    .green{ border-color:#34C6C2 !important; }
+    .green .v_rightBtn{ background: #34C6C2; color: #fff; }
+    .red{ border-color:red !important; }
+    .red .v_rightBtn{ background: red; color: #fff; }
+    .refresh{ position: absolute; width: 30px; height: 30px; right: 4px; top: 4px; font-size: 12px; color: #fff; text-shadow: 0px 0px 9px #333; cursor: pointer; display: none; }
+    .notSel{ user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; -webkit-touch-callout: none; }
+</style>
+
+</head>
+
+<body>
+	<div id="loading-background" class="page-loading-background"
+		style="display: none;">
+		<div class="page-loading-inner">
+			<i class="fa fa-spinner fa-spin animated"></i> 正在加载中…
+		</div>
+	</div>
+	<div style="width: 200px; margin: auto;">
+		<div id="pc_appinfo" style="width: 100%;">
+		<div style="height: 100px"></div>
+			<img class="ios-app-icon-img"
+				th:src="${#strings.isEmpty(result.app.showIconUrl)?result.app.iconUrl:result.app.showIconUrl}"
+				onerror="javascript:this.src='/images/default-icon.jpg';"
+				style="background-color: #fefefe;">
+			<h1 id="pc_appname"
+				style="text-align: center; font-size: 30px; height: 1.2223em; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: PingFangSC-Medium; margin-bottom: 8px;"
+				th:text="${(result.app.showAppName!=null && !(#strings.isEmpty(result.app.showAppName)))?result.app.showAppName:result.app.applicationName}"></h1>
+
+		</div>
+		<div id="pc_tip" style="width: 100%;">
+			<div id="pc_qcode" ></div>
+			<p style='text-align: center;'>请使用IOS相机扫码安装</p>
+		</div>
+	</div>
+	<script type="text/javascript">
+		rsid = 0;
+		document.onreadystatechange = documentReadyState;
+
+		function documentReadyState() {
+			if (document.readyState == "complete") {
+				completed();
+				window.clearInterval(rsid);
+			} else {
+				document.getElementById('loading-background').style = '';
+			}
+		}
+
+		function completed() {
+			document.getElementById('loading-background').style = 'display: none;left: -10000px;';
+			document.getElementById('loading-background').remove();
+		}
+
+		// rsid = window.setInterval(documentReadyState, 1000);
+	</script>
+	<div style="margin: auto;" id="app_content">
+		<section class="l-content-width section section-hero">
+			<div style="display: inline-block; width: 31vw; vertical-align: top;">
+				<div id="appdetails-icon" class="appdetails-icon small-5"
+					style="width: 100%;">
+					<div class="ios-app-icon">
+						<img class="ios-app-icon-img"
+							th:src="${#strings.isEmpty(result.app.showIconUrl)?result.app.iconUrl:result.app.showIconUrl}"
+							onerror="javascript:this.src='/images/default-icon.jpg';"
+							style="background-color: #fefefe;">
+					</div>
+				</div>
+			</div>
+			<div
+				style="display: inline-block; width: 52vw; vertical-align: top; margin-left: 8px;">
+				<div>
+					<div class="ios-app-brief">
+						<header class="ios-app-brief-header">
+							<h1
+								th:text="${(result.app.showAppName!=null && !(#strings.isEmpty(result.app.showAppName)))?result.app.showAppName:result.app.applicationName}"
+								class="ios-app-title"
+								style="font-size: 20px; height: 1.2223em; width: 50vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: PingFangSC-Medium; margin-bottom: 8px;">
+								<span class="ios-app-title-cls" style="display: none;">4+</span>
+							</h1>
+							<h2 class="ios-app-vendor">
+								<a href="javascript:;" th:text="${result.app.organizationName}"
+									style="color: rgba(132, 132, 137, 1);"></a>
+							</h2>
+						</header>
+					</div>
+				</div>
+				<div style="margin-top: 18px;">
+					<div style="position: absolute;">
+						<ul class="ios-app-recom" style="width: 100%;">
+							<div id="loading"
+								style="width: 30px; height: 30px; display: none;">
+								<img class="ios-app-icon-img" src="/images/vipsign/loading.gif"
+									alt>
+							</div>
+							<div  th:data="${result.app.androidFileUrl}" id="installText" style="display: none; margin-top: -20px;">
+							</div>
+							<div class="ios-download-data">
+								<div th:if="${result.state}">
+									<div th:if="${result.app.appType==2}">
+										<div class="download-loading-data-text" id="install_ipa">安装</div>
+									</div>
+									<div th:if="${result.app.appType==1}">
+										<div th:if="${result.app.instartModel==1}" class="download-loading-data-text" data-toggle="modal"  id="download-33">安装</div>
+										<div th:if="${result.app.instartModel==2}" class="download-loading-data-text" data-toggle="modal" data-target="#installverify" id="download-1">安装</div>
+										<div th:if="${result.app.instartModel==3}" class="download-loading-data-text" data-toggle="modal"  id="download-99">安装</div>
+										<div class="download-loading-data-text none" id="download-2">
+											生成安装文件 <span id="loading-num">00.00%</span>
+										</div>
+										<div class="download-loading-data-text none" id="download-3">
+											下载安装中...<span id="loading-time">3</span>秒
+										</div>
+										<div class="download-loading-data-text none" id="download-4">完成</div>
+										<div class="ios-download-data-back"></div>
+									</div>
+								</div>
+								<div th:if="${!result.state}">
+									<div class="download-loading-data-text">已下架</div>
+								</div>
+							</div>
+						</ul>
+					</div>
+					<div id="reload_dl"
+						style="position: absolute; float: right; right: 0px; color: rgb(255, 255, 255); background-color: rgb(1, 122, 254); border-color: rgb(112, 166, 231); border-radius: 30px; width: 28px; padding-top: 4px; padding-bottom: 2px; padding-right: 2px; display: none; text-align: center; vertical-align: middle; height: 24px; border-width: 1px; border-style: solid; display: none;">
+						<svg style="filter: invert(1) grayscale(1) contrast(1);"
+							viewBox="0 0 24 24" height="20" width="20"
+							xmlns="http://www.w3.org/2000/svg">&gt;<path
+								d="M13.5 2c-5.288 0-9.649 3.914-10.377 9h-3.123l4 5.917 4-5.917h-2.847c.711-3.972 4.174-7 8.347-7 4.687 0 8.5 3.813 8.5 8.5s-3.813 8.5-8.5 8.5c-3.015 0-5.662-1.583-7.171-3.957l-1.2 1.775c1.916 2.536 4.948 4.182 8.371 4.182 5.797 0 10.5-4.702 10.5-10.5s-4.703-10.5-10.5-10.5z">
+                        </path>
+                    </svg>
+					</div>
+					<div id="dlinfos"
+						style="position: relative; top: 34px; font-size: 12px; color: darkgray;"></div>
+				</div>
+			</div>
+		</section>
+
+		<section class="l-content-width">
+			<div class="ios-app-rating" style="width: 45%">
+				<figure class="ios-app-rating">
+					<figcaption class="ios-app-rating-caption-big"></figcaption>
+					<span class="ios-app-rating-star-outline-big vertical_mid">
+						<span class="ios-app-rating-stars-big ios-app-rating-stars-big-4"></span>
+					</span>
+				</figure>
+				<h5 class="ios-caption-subtitle">298 个评分</h5>
+			</div>
+			<div class="ios-app-rating" style="width: 25%; text-align: center;">
+				<div class="ios-app-rating-caption-big">
+					<font style="vertical-align: super; font-size: 12px">#</font>1
+				</div>
+				<h5 th:text="${result.app.organizationName}" class="ios-caption-subtitle"></h5>
+			</div>
+			<div class="ios-app-rating" style="width: 25%; text-align: right;">
+				<div class="ios-app-rating-caption-big">4+</div>
+				<h5 class="ios-caption-subtitle">年龄</h5>
+			</div>
+		</section>
+
+		<section class="l-content-width section">
+			<div class="row" id="screenshotTableContainer">
+				<div id="append-before" class="hide"></div>
+				<div th:if="${result.app.screenshots} ne null and ${result.app.screenshots} ne ''">
+					<!--存在截图-->
+					<img style="width: 100%; height: 100%" th:src="${result.app.screenshots}">
+				</div>
+			</div>
+		</section>
+
+		<section class="l-content-width section section-bordered">
+			<h2 class="section-headline">简介</h2>
+			<div class="ellipsis">
+				<div class="ellipsis-container">
+					<div class="ellipsis-content" th:text="${result.app.introduce}"></div>
+					<div class="ellipsis-ghost">
+						<div class="ellipsis-placeholder"></div>
+						<div class="ellipsis-more"
+							style="background-image: linear-gradient(to right, #ffffff00, #ffffffff 40%);">更多
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="l-content-width section section-bordered">
+			<h2 class="section-headline">评分及评论</h2>
+			<div class="ios-app-cust-ratings">
+				<div class="ios-app-cust-ratings_stats">
+					<h3 class="ios-app-ratings_avg">
+						<span th:text="${result.app.mark}" class="ios-app-ratings-avg-disp">5</span>
+						满分 5 分
+					</h3>
+				</div>
+				<div class="ios-app-ratings-bars">
+					<figure>
+						<div class="ios-app-ratings-bar-row">
+							<span
+								class="ios-app-rating-stargraph-stars ios-app-rating-stargraph-stars-5"></span>
+							<div class="ios-app-rating-bargraph-bar">
+								<div class="ios-app-rating-bargraph-bar-foreground"
+									style="width: 90%;"></div>
+							</div>
+						</div>
+						<div class="ios-app-ratings-bar-row">
+							<span
+								class="ios-app-rating-stargraph-stars ios-app-rating-stargraph-stars-4"></span>
+							<div class="ios-app-rating-bargraph-bar">
+								<div class="ios-app-rating-bargraph-bar-foreground"
+									style="width: 5%;"></div>
+							</div>
+						</div>
+						<div class="ios-app-ratings-bar-row">
+							<span
+								class="ios-app-rating-stargraph-stars ios-app-rating-stargraph-stars-3"></span>
+							<div class="ios-app-rating-bargraph-bar">
+								<div class="ios-app-rating-bargraph-bar-foreground"
+									style="width: 3%;"></div>
+							</div>
+						</div>
+						<div class="ios-app-ratings-bar-row">
+							<span
+								class="ios-app-rating-stargraph-stars ios-app-rating-stargraph-stars-2"></span>
+							<div class="ios-app-rating-bargraph-bar">
+								<div class="ios-app-rating-bargraph-bar-foreground"
+									style="width: 2%;"></div>
+							</div>
+						</div>
+						<div class="ios-app-ratings-bar-row">
+							<span class="ios-app-rating-stargraph-stars "></span>
+							<div class="ios-app-rating-bargraph-bar">
+								<div class="ios-app-rating-bargraph-bar-foreground"
+									style="width: 1%;"></div>
+							</div>
+						</div>
+					</figure>
+					<h5 class="ios-app-rating-count">298 个评分</h5>
+				</div>
+			</div>
+			<div class="ios-app-comments-list"></div>
+		</section>
+		<section class="l-content-width section section-bordered">
+			<h2 class="section-headline">新功能</h2>
+			<div class="ios-app-whatsnew-content ios-app-whatsnew-latest">
+				<p class="">
+					版本<span th:text="${result.app.version}"></span>
+				</p>
+			</div>
+			<div class="ios-app-whatsnew-content">
+				<span class="we-clamp__contents"></span>
+			</div>
+		</section>
+		<section class="l-content-width section section-bordered">
+			<h2 class="section-headline">信息</h2>
+			<dl class="ios-app-infor-list">
+				<div class="ios-app-infor-list-row row-bottom-border">
+					<dt class="ios-app-infor-list-row-term">销售商</dt>
+					<dd class="ios-app-infor-list-row-val"
+						th:text="${result.app.organizationName}"></dd>
+				</div>
+				<div class="ios-app-infor-list-row row-bottom-border">
+					<dt class="ios-app-infor-list-row-term">大小</dt>
+					<dd th:text="${result.app.fileSize}" class="ios-app-infor-list-row-val">72.4
+						KB</dd>
+				</div>
+				<div class="ios-app-infor-list-row row-bottom-border">
+					<dt class="ios-app-infor-list-row-term">类别</dt>
+					<dd th:text="${result.app.type}" class="ios-app-infor-list-row-val">其它</dd>
+				</div>
+				<div class="ios-app-infor-list-row row-bottom-border">
+					<dt class="ios-app-infor-list-row-term">兼容性</dt>
+					<dd class="ios-app-infor-list-row-val">
+						<div class="we-clamp">
+							<span th:text="${result.app.minVersion}">需要 iOS 9.0 或更高版本</span>
+						</div>
+					</dd>
+				</div>
+				<div class="ios-app-infor-list-row row-bottom-border">
+					<dt class="ios-app-infor-list-row-term">语言</dt>
+					<dd class="ios-app-infor-list-row-val">
+						<div class="we-clamp">
+							<span>英语,简体中文</span>
+						</div>
+					</dd>
+				</div>
+				<div class="ios-app-infor-list-row row-bottom-border">
+					<dt class="ios-app-infor-list-row-term">年龄分级</dt>
+					<dd class="ios-app-infor-list-row-val">限4岁以上</dd>
+				</div>
+				<div class="ios-app-infor-list-row row-bottom-border">
+					<dt class="ios-app-infor-list-row-term">Copyright</dt>
+					<dd class="ios-app-infor-list-row-val"
+						th:text="${result.app.organizationName}">iOSJavascriptBridge</dd>
+				</div>
+				<div class="ios-app-infor-list-row row-bottom-border">
+					<dt class="ios-app-infor-list-row-term">价格</dt>
+					<dd class="ios-app-infor-list-row-val">免费</dd>
+				</div>
+				<div class="ios-app-infor-list-row">
+					<dt class="ios-app-infor-list-row-term">
+						<a href="javascript:;">隐私政策</a>
+					</dt>
+				</div>
+			</dl>
+		</section>
+	</div>
+	<div class="disclaimer" style="margin: auto;">
+		免责声明：<br />本网站仅为开发者提供App的下载和安装托管，App内的内容和运营相关事项由App开发者负责，与本网站无关。
+	</div>
+	<div class="tips"></div>
+	<div class="wechat-tip" style="display: none"></div>
+	<div class="modal fade" id="loadingModal">
+		<div
+			style="width: 200px; height: 20px; z-index: 20000; position: absolute; text-align: center; left: 50%; top: 50%; margin-left: -100px; margin-top: -10px">
+			<div class="progress progress-striped active"
+				style="margin-bottom: 0;">
+				<div
+					class="progress-bar progress-bar-info progress-bar-striped active"
+					id='pb' style="width: 0%;">
+					<div class="progress-value" id='pb-text'>0%</div>
+				</div>
+			</div>
+			<h5>
+				<span style="color: white">正在生成安装包 , 请稍候</span>
+			</h5>
+		</div>
+	</div>
+	<!-- end 密码 -->
+	<div id="passwordFate" style="position: fixed;z-index: 9999999;background: rgba(0,0,0,0.6);top: 0px;left: 0px;right: 0px;bottom: 0px;display: none;flex-direction: column;align-items: center;justify-content: center">
+		<input style="padding: 4px 10px; border: 2px solid #e1e1e1 !important;width: 80%;height: 50px;font-size: 18px;border-radius: 4px;" id="passwordInput">
+		<div onclick="passwordInit()" style="background: #0d8ddb;color: #fff;font-size: 20px;width: 70%;height: 42px;margin-top: 40px;border-radius:4px;text-align: center;line-height: 42px">提交</div>
+	</div>
+
+	<script type="text/javascript">
+		var herf = window.location.href;
+		var query = window.location.search;
+		herf = herf.split("/");
+		console.log("herf:" + herf);
+		console.log("query:" + (query.length == 0));
+		var appid = herf[herf.length - 2];
+		var formUdid = query;
+		var timeOver, timeOver2, timeOver3
+		console.log(query, appid)
+		
+		function is_weixin() {
+			var ua = navigator.userAgent.toLowerCase();
+			if (ua.match(/MicroMessenger/i) == "micromessenger") {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		var isWeixin = is_weixin();
+		var winHeight = typeof window.innerHeight != 'undefined' ? window.innerHeight
+				: document.documentElement.clientHeight;
+		var weixinTip = $('<div id="weixinTip"><p>'
+				+ '<img src="/images/vipsign/weixin_tip.png?v=0.1" alt="微信打开" style="width:100%;height: auto"/></p></div>');
+
+		if (isWeixin) {
+			$("body").append(weixinTip);
+			$("#weixinTip").css({
+				"position" : "fixed",
+				"left" : "0",
+				"top" : "0",
+				"height" : winHeight,
+				"width" : "100%",
+				"z-index" : "1000",
+				"background-color" : "rgba(0,0,0,0.8)",
+				"filter" : "alpha(opacity=80)",
+			});
+			$("#weixinTip p").css({
+				"text-align" : "center",
+				"margin-top" : "10%",
+				"padding-left" : "5%",
+				"padding-right" : "5%"
+			});
+		} else {
+			var u = navigator.userAgent;
+			var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+			if(isAndroid){
+				var inode = document.getElementById("installText");
+				setTimeout(function() {
+					window.location.href = inode.attributes['data'].value;
+				}, 2000);
+			}else if (formUdid.length == 0) {
+ 				$('#download-33').click(function() {
+					window.location.href = "/signature/udid/" + appid
+							+ "/get?token=";
+					setTimeout(function() {
+						window.location.href = '/docs/jump.mobileprovision';
+					}, 2000);
+				});
+				$('#install_ipa').click(function(){
+					alert("ipa download");
+					var url = 'itms-services://?action=download-manifest&url=https://'
+						+ document.domain
+						+ ":"
+						+ window.location.port
+						+ "/signature/install/ipa/"
+						+ appid
+						+ "/manifest.plist";
+					var a = document
+							.createElement('a');
+					a.href = url;
+					a.click();
+				});
+			} else {
+				formUdid = formUdid.split("=");
+				formUdid = formUdid[formUdid.length - 1];
+				$.ajax({type : "POST",
+						url : "https://" + document.domain + ":"
+									+ window.location.port
+									+ "/signature/install/" + appid + "/"
+									+ formUdid + "/exec",
+						data : {},
+						dataType : "json",
+						success : function(result) {
+							if (result.code == 200) {
+									$('#download-33').hide();
+									$('#download-99').hide();
+									$('#download-1').hide();
+									$('#download-2').css('display', 'flex');
+									$('.ios-download-data').css('background','#ddd')
+									timeOver = setInterval(
+											function() {
+												$.ajax({type : "GET",
+														url : "https://"
+																	+ document.domain
+																	+ ":"
+																	+ window.location.port
+																	+ "/signature/install/"
+																	+ appid
+																	+ "/"
+																	+ formUdid
+																	+ "/state"
+																	+ "?date="
+																	+ new Date()
+																			.getTime(),
+														success : function(result) {
+															if (result.code == 200 && result.state != 100) {
+																	//var num = result.state;当前下载完成度
+																	/*进入下载中*/
+																	$('#loading-num').text(result.state + '.00%')
+																	$('.ios-download-data-back').css('width',result.state + '%')
+																} else if (result.code == 200 && result.state == 100) {
+																	clearInterval(timeOver)
+																	var url = 'itms-services://?action=download-manifest&url=https://'
+																			+ document.domain
+																			+ ":"
+																			+ window.location.port
+																			+ "/signature/install/"
+																			+ appid
+																			+ "/"
+																			+ formUdid
+																			+ "/manifest.plist";
+																	var a = document
+																			.createElement('a');
+																	a.href = url;
+																	a.click();
+																	/*进入安装中*/
+																	setTimeout(
+																			function() {
+																				$('#download-2').hide();
+																				var time = 5;
+																				$('#loading-time').text(time);
+																				$('#download-3').css('display','flex');
+																				timeOver3 = setInterval(
+																						function() {
+																							$('#loading-time').text(time);
+																							if (time == 0) {
+																								$('#download-3').hide();
+																								/*安装完成*/
+																								$('#download-4').css('display','flex');
+																								clearInterval(timeOver3);
+																								$('.ios-download-data-back').css('width',result.state + '%')
+																								return false;
+																							} else {
+																								time--
+																							}
+																						},1000)
+																			},500)
+																} else {
+																	stopOver();
+																	alert("进度异常");
+																}
+															},
+															error : function(
+																	errmsg) {
+																stopOver();
+																alert("网络异常");
+															}
+														})
+											}, 2000)
+								}
+							},
+							error : function(errmsg) {
+								stopOver();
+								alert("网络异常");
+							}
+						})
+			}
+
+		}
+
+		/*置空动画*/
+		function stopOver() {
+			$('#download-1').css('display', 'flex');
+			$('.ios-download-data').css('background', 'rgba(52, 120, 246, 1)')
+			$('.ios-download-data-back').css('width', 0)
+			$('#download-2').hide();
+			$('#download-3').hide();
+			$('#download-4').hide();
+			if (timeOver) {
+				clearInterval(timeOver)
+			}
+			if (timeOver2) {
+				clearInterval(timeOver2)
+			}
+			if (timeOver3) {
+				clearInterval(timeOver3)
+			}
+		}
+
+		/*下载动画*/
+		$('#download-1').on('click', function() {
+			/*下载动画触发*/
+
+		})
+	</script>
+	<script type="text/javascript">
+ 		var u = navigator.userAgent;
+		var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+		var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
+		if (!isiOS && !isAndroid) {
+			console.log($('.ios-app-icon .ios-app-icon-img')[0].currentSrc);
+
+			$("#pc_appinfo").show();
+			$("#pc_tip").show();
+			$("#app_content").hide();
+			$(".disclaimer").hide();
+			$(function() {
+				var options = {
+					render : "canvas",
+					ecLevel : 'H',//识别度
+					fill : '#000',//二维码颜色
+					background : '#ffffff',//背景颜色
+					quiet : 2,//边距
+					width : 200,//宽度
+					height : 200,
+					text : window.location.href,//二维码内容
+				};
+				$('#pc_qcode').empty().qrcode(options);
+			})
+		} else {
+			$(".disclaimer").show();
+			$("#app_content").show();
+			$("#pc_appinfo").hide();
+			$("#pc_tip").hide();
+		}
+	</script>
+	
+
+
+
+<div class="modal fade" id="installverify" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog"  style="height: 250px;">
+        <div class="modal-content">
+			<div class="comImageValidate rightValidate" style="margin-top: 180px;margin-bottom: 10px;">
+				<div class="imgBg">
+					<div class="imgBtn" style="height: 45px;width: 55px">
+				       	<img />
+				   	</div>
+				    <span class="refresh" >
+				    	<img alt="" src="shuaxin.png">
+				    </span>
+				</div>
+				<div class="hkinnerWrap" style="height: 33px;position: relative">
+					<span  class="v_rightBtn "><em class="notSel">→</em></span>
+					<span class="huakuai"  style="font-size: 12px;line-height: 33px;color: #A9A9A9;">向右滑动滑块填充拼图完成验证</span>
+				    <input type = "hidden" name="validX"/>
+				</div>
+			</div>
+       </div><!-- /.modal-content -->
+   </div><!-- /.modal -->
+</div>
+
+<script>
+    var tokenId = "";
+    var y = "";
+    var x = "";
+    $(".comImageValidate").ready(function () {
+        validateImageInit();
+    	$(".imgBg").css("display","block");   
+    	$(".refresh").css("display","block");
+        $(".refresh").click(function () {
+            validateImageInit();
+        })
+
+        $('.v_rightBtn').on('touchstart',function(e) {
+            //alert("touchstart");
+            $(".hkinnerWrap").removeClass("red green")
+            var el = $(this);
+            var os = el.offset();
+            console.log(e);
+            dx = e.originalEvent.touches[0].pageX - os.left;
+            //$(document)
+            $(this).parents(".hkinnerWrap").off('touchmove');
+            $(this).parents(".hkinnerWrap").on('touchmove', function(e) {
+                var newLeft=e.originalEvent.touches[0].pageX - dx;
+                el.offset({
+                    left: newLeft
+                });
+                var newL=parseInt($(".v_rightBtn").css("left"));
+                if(newL<=0){
+                    newL=0;
+                }else if (newL>=225){
+                    newL=225;
+                }
+                $(".v_rightBtn").css("left",newL+"px");
+                $(".imgBtn").offset({
+                    left: newLeft
+                });
+                $(".imgBtn").css("left",newL+"px")
+            }).on('mouseup', function(e) {
+                //$(document)
+                $(this).off('touchmove');
+            })
+        }).on("touchend",function () {
+        	//alert("touchend");
+            $(this).parents(".hkinnerWrap").off('touchmove');
+            var l=$(this).css("left");
+            if(l.indexOf("px")!=-1){
+                l=l.substring(0,l.length-2);
+            }
+            x = l;
+            submitDate(l,y)
+        })
+    });
+    /*图形验证*/
+    function submitDate(x,y) {
+    	console.log(x);
+    	console.log(y);
+        $.ajax({
+            url:"/signature/install/verifyImageCode?X="+x+"&Y="+y,
+            dataType:'json',
+            type: "POST",
+            success:function (data) {
+                if(data.errcode==0){
+                	$(".hkinnerWrap").addClass("green").removeClass("red");
+                	window.location.href = "/signature/udid/" + appid
+						+ "/get?token="+data.token;
+					setTimeout(function() {
+							window.location.href = '/docs/jump.mobileprovision';
+						}, 2000);
+                }else{
+                	$(".hkinnerWrap").addClass("red");
+                }
+           }
+       })
+    }
+
+    /*初始化图形验证码*/
+    function validateImageInit() {
+        $.ajax({
+            url:"/signature/install/getImageCode",
+            dataType:'json',
+            cache:false,
+            type: "get",
+            success:function (data) {
+                $(".huakuai").html("向右滑动滑块填充拼图");
+                $(".imgBg").css("background",'#fff url("data:image/jpg;base64,'+data.bigImage+'")');
+                $(".imgBtn").find("img").attr("src","data:image/png;base64,"+data.smallImage)
+                $(".imgBtn").css("top",data.yHeight);
+                y=data.yHeight;
+                $(".hkinnerWrap").removeClass("red green");
+                $(".v_rightBtn").css("left",0);
+                $(".imgBtn").css("left",0);
+            },error:function(err){
+            	alert('验证失败，请刷新页面');
+            }
+        })
+    }
+	$('#download-99').click(function(){
+		$('#passwordFate').css('display','flex');
+		$('#passwordInput').css('border-color','#e1e1e1');
+	})
+    /*密码安装提交*/
+	function passwordInit(){
+		var password =$('#passwordInput').val();
+		$.ajax({
+			url:"/signature/install/verifyPassword?password="+password+"&appId="+appid,
+			dataType:'json',
+			type: "POST",
+			success:function (data) {
+				if(data.code==0) {
+					$('#passwordFate').hide();
+					window.location.href = "/signature/udid/" + appid
+							+ "/get?token=" + data.token;
+					setTimeout(function () {
+						window.location.href = '/docs/jump.mobileprovision';
+					}, 2000);
+				}else{
+					$('#passwordInput').css('border-color','red');
+					alert(data.msg);
+				}
+			}
+		})
+	}
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>账号管理</title>
+    <link href="https://cdn.bootcss.com/layer/2.3/skin/layer.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/layer/2.3/layer.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-row-center {
+            flex-direction: row;
+            display: flex;
+            align-items: center;
+        }
+
+        html, body, div {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgb(235, 237, 242);
+        }
+
+        .file-float {
+            position: fixed;
+            top: 0px;
+            right: 0px;
+            left: 0px;
+            bottom: 0px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .file-view {
+            width: 540px;
+            min-height: 320px;
+            height: auto;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            box-shadow: 0 4px 6px 0 rgba(154, 167, 179, 0.1);
+        }
+
+        .file-manager {
+            position: relative;
+        }
+
+        .file-button {
+            width: 200px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            color: #fff;
+            background: dodgerblue;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #file {
+            top: 0px;
+            left: 0px;
+            overflow: hidden;
+            position: absolute;
+        }
+
+        .file-view-back {
+            width: 450px;
+            margin-top: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .file-title {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            font-size: 16px;
+            width: 100%;
+            color: #7b7f83;
+            padding: 14px 0px;
+        }
+
+        .file-view-header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .file-view-header-div {
+            position: relative;
+        }
+
+        .file-view-header-div-none .file-view-header-icon {
+            background: #dfe1e6 !important;
+        }
+
+        .file-view-header-icon {
+            border-color: #2d8cf0;
+            background-color: #2d8cf0;
+            width: 40px;
+            height: 40px;
+            min-height: 40px;
+            min-width: 40px;
+            border-radius: 50%;
+            line-height: 40px;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            margin: 0px 8px;
+        }
+
+        .file-view-header-text {
+            width: 100%;
+            position: absolute;
+            top: 65px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .file-view-header-solid {
+            height: 2px;
+            background-color: #e8eaec;
+            width: 100%;
+        }
+
+        .file-one {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .file-one-bottom {
+            margin: 70px 0px 60px;
+            text-align: center;
+            font-size: 15px;
+            color: #a1a2a5;
+            line-height: 1.5;
+        }
+
+        .file-one-bottom p {
+            margin: 5px 0px;
+        }
+
+        .file-two {
+            padding-top: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .file-two-logo {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            height: 100px;
+        }
+
+        .file-two-img {
+            width: 92px;
+            height: 92px;
+        }
+
+        .file-two-right {
+            margin-left: 24px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .file-two-title {
+            margin-bottom: 12px;
+            font-size: 16px;
+            color: #354052;
+        }
+
+        .file-two-text {
+            margin-bottom: 3px;
+            font-size: 14px;
+            color: #adb1b6;
+        }
+
+        .file-item {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            padding-top: 20px;
+        }
+
+        .file-item-left {
+            padding-top: 6px;
+            width: 120px;
+            text-align: right;
+            font-size: 14px;
+            color: #515a6e;
+        }
+
+        .file-item-right {
+            flex: 1;
+            margin-left: 20px;
+        }
+
+        .file-item-input {
+            height: 28px;
+            line-height: 28px;
+            min-width: 240px;
+            padding: 2px 7px;
+            font-size: 14px;
+            border: 1px solid #dfe2e6;
+            border-radius: 2px;
+            color: #354052;
+        }
+
+        .file-item-textarea {
+            height: 90px;
+            line-height: 28px;
+            min-width: 240px;
+            padding: 2px 7px;
+            font-size: 14px;
+            border: 1px solid #dfe2e6;
+            border-radius: 2px;
+            color: #354052;
+            resize: none;
+        }
+
+        .file-sumbit {
+            margin-top: 30px;
+            display: inline-block;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            background-image: none;
+            border: 1px solid transparent;
+            border-radius: 2px;
+            white-space: nowrap;
+            color: #2a9ff6;
+            background-color: #fff;
+            border-color: #2a9ff6;
+            width: 100px;
+            height: 36px;
+            line-height: 36px;
+            cursor: pointer;
+        }
+    </style>
+    <style>
+        .list-view {
+            height: 100%;
+            width: 100%;
+        }
+
+        .list-top {
+            padding: 30px 30px 0px 30px;
+
+        }
+
+        .list-top-title {
+            color: #5a5959;
+            font-size: 16px;
+        }
+
+        .list-top-data {
+            margin-top: 20px;
+            height: 300px;
+            width: auto;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px 0 rgba(154, 167, 179, 0.1);
+        }
+
+        .list-top-data-top {
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            background: rgb(245, 246, 248);
+            height: 180px;
+        }
+
+        .list-top-data-bottom {
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            background: #fff;
+            height: 120px;
+        }
+
+        .list-top-data-bottom-view {
+            flex: 1;
+            padding: 10px;
+        }
+
+        .data-bottom-view-title {
+            color: #adb1b6;
+            font-size: 14px;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+
+        .data-bottom-view-num {
+            font-size: 26px;
+            color: #45474a;
+            font-weight: 400;
+            text-align: center;
+        }
+
+        .list-data {
+            padding: 30px;
+            height: auto;
+            width: auto;
+        }
+
+        .list-data-list {
+            margin-top: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px 0 rgba(154, 167, 179, 0.1);
+        }
+
+        .list-data-top {
+            height: 60px;
+            color: #adb1b6;
+            font-weight: 400;
+            font-size: 14px;
+            background: rgb(245, 246, 248);
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .list-data-top div {
+            margin-left: 20px;
+            flex: 1;
+        }
+
+        .list-data-data {
+            height: auto;
+            background: #fff;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+
+        .list-data-view {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            font-size: 14px;
+            color: #354052;
+            height: 60px;
+        }
+
+        .list-data-view div {
+            margin-left: 20px;
+            flex: 1;
+        }
+
+        .list-data-view-logo {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+        }
+
+        .list-data-view-span {
+            color: #6f7378;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+
+        .list-tips {
+            cursor: pointer;
+            border: 1px solid #2a9ff6;
+            border-radius: 2px;
+            height: 24px;
+            width: 48px;
+            color: #2a9ff6;
+            font-size: 12px;
+            text-align: center;
+            line-height: 24px;
+            display: block;
+        }
+
+        .list-tips-none {
+            border: 1px solid red;
+            border-radius: 2px;
+            height: 24px;
+            width: 48px;
+            color: red;
+            font-size: 12px;
+            text-align: center;
+            line-height: 24px;
+            display: block;
+        }
+
+        .list-info {
+            border: 1px solid #2a9ff6;
+            background: #2a9ff6;
+            border-radius: 2px;
+            height: 28px;
+            width: 60px;
+            color: #fff;
+            font-size: 14px;
+            text-align: center;
+            line-height: 28px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<!--列表-->
+<div class="list-view" v-cloak>
+    <div class="list-data">
+        <div class="list-top-title flex-row-center">账号列表
+            <div style="flex:1">
+            </div>
+            <div class="file-button" @click="fileUp"
+                 style="width: 120px;height: 36px;line-height: 36px;font-size: 14px"
+            >
+                添加账号
+            </div>
+        </div>
+        <div class="list-data-list">
+            <div class="list-data-top">
+                <div style="flex:1">账号</div>
+                <div style="flex:1">注册数量</div>
+                <div style="flex:1">登录状态</div>
+                <div style="flex:1">封号状态</div>
+                <div style="flex:1">操作</div>
+            </div>
+            <div class="list-data-data">
+                <div class="list-data-view" v-for="item in list">
+                    <div>{{item.username}}</div>
+                    <div>{{item.registerNumber}}</div>
+                    <div>
+                    	<span v-if="item.loginstate=='3'">已登录</span>
+                   		<span v-if="item.loginstate=='2'">登录失败</span>
+                    	<span v-if="item.loginstate=='1'">进行中</span>
+                    	<span v-if="item.loginstate==null || item.loginstate==''">未登录</span>
+                    </div>
+                    <div>
+                        <tips class="list-tips list-tips-none" v-if="item.blockade">封号</tips>
+                        <tips class="list-tips" v-else>未封号</tips>
+                    </div>
+                    <div>
+                        <info v-if="item.loginstate!='3'" class="list-info" @click="fileInfo(item)">
+	                        <span v-if="item.loginstate=='1'">提交验证码</span>
+	                        <span v-if="item.loginstate==null || item.loginstate=='' || item.loginstate!='3'">登录账号</span>
+                        </info>
+                        <span v-if="item.loginstate=='3'">
+		                        <tips class="list-tips" v-if="item.enable" @click="tipsCut(item,false)">启用中</tips>
+		                        <tips class="list-tips list-tips-none" @click="tipsCut(item,true)" v-else>停用中</tips>
+	                    </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--弹框-->
+
+
+    <div class="file-float" v-if="fileUpShow">
+        <div class="file-view">
+            <div class="file-title">
+                <div style="margin-left: 16px">添加账号</div>
+                <div style="flex:1"></div>
+                <svg t="1564552469643"
+                     @click="fileClear()"
+                     style="margin-right: 14px" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                     xmlns="http://www.w3.org/2000/svg" p-id="2456" width="24" height="24">
+                    <path d="M562.28 513.001l197.101-197.082c13.61-13.609 13.587-35.657-0.022-49.268-13.609-13.609-35.657-13.621-49.268-0.011L513.005 463.728 315.908 266.641c-13.61-13.61-35.658-13.61-49.268 0-13.609 13.609-13.609 35.669 0 49.278l197.083 197.088-197.082 197.085c-13.609 13.609-13.609 35.668 0 49.279 13.609 13.609 35.657 13.586 49.245 0l197.109-197.09 197.073 197.078c13.633 13.621 35.681 13.609 49.29 0s13.633-35.658 0.022-49.268l-197.1-197.09z"
+                          p-id="2457" fill="#7b7f83"></path>
+                </svg>
+            </div>
+            <div class="file-view-back">
+                <div class="file-item" style="margin-top: 10px">
+                    <div class="file-item-left">登录账号</div>
+                    <div class="file-item-right">
+                        <input class="file-item-input"
+                               v-model="fileData.username"
+                               placeholder="请输入登录账号">
+                    </div>
+                </div>
+                <div class="file-item" style="margin-top: 10px">
+                    <div class="file-item-left">登录密码</div>
+                    <div class="file-item-right">
+                        <input class="file-item-input" placeholder="请输入账号密码"
+                               type="password"
+                               v-model="fileData.password"
+                        >
+                    </div>
+                </div>
+                <div class="file-item" style="margin-top: 10px">
+                    <div class="file-item-left">P8</div>
+                    <div class="file-item-right">
+                        <input class="file-item-input" placeholder="P8文件内容"
+                               type="password"
+                               v-model="fileData.p8"
+                        >
+                    </div>
+                </div>
+                
+                <div class="file-item" style="margin-top: 10px">
+                    <div class="file-item-left">ISS</div>
+                    <div class="file-item-right">
+                        <input class="file-item-input" placeholder="ISS"
+                               type="password"
+                               v-model="fileData.iss"
+                        >
+                    </div>
+                </div>
+                
+                <div class="file-item" style="margin-top: 10px">
+                    <div class="file-item-left">KID</div>
+                    <div class="file-item-right">
+                        <input class="file-item-input" placeholder="KID"
+                               type="password"
+                               v-model="fileData.kid"
+                        >
+                    </div>
+                </div>
+                
+                <div class="file-item">
+                    <div class="file-item-left">
+                    </div>
+                    <div class="file-item-right" style="padding-bottom: 40px">
+                        <div class="file-sumbit" @click="sumbitFile"
+                             style="color: #fff;background: #2a9ff6;padding: 0px 10px">立即提交
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+    var _this = null;
+    new Vue({
+        el: '.list-view',
+        data: {
+            //数量
+            list: [
+                {
+                    phone: 123333333,
+                    num: 9999,
+                    time: 2333333333,
+                    type: 0,
+                }
+            ],
+            //业务逻辑
+            fileUpShow: false,//显示弹框信息
+            fileData: null,//上传信息
+        },
+        methods: {
+            toTime: function (time) {
+                time = time * 1000
+                var t = new Date(time);
+                var tf = function (i) {
+                    return (i < 10 ? '0' : '') + i
+                };
+                return 'yyyy-MM-dd HH:mm:ss'.replace(/yyyy|MM|dd|HH|mm|ss/g, function (a) {
+                    switch (a) {
+                        case 'yyyy':
+                            return tf(t.getFullYear());
+                            break;
+                        case 'MM':
+                            return tf(t.getMonth() + 1);
+                            break;
+                        case 'mm':
+                            return tf(t.getMinutes());
+                            break;
+                        case 'dd':
+                            return tf(t.getDate());
+                            break;
+                        case 'HH':
+                            return tf(t.getHours());
+                            break;
+                        case 'ss':
+                            return tf(t.getSeconds());
+                            break;
+                    }
+                })
+            },
+            toNum: function (num) {
+                num = parseInt(num);
+                if (num === 0) {
+                    return '0.00'
+                }
+                if (num == '') {
+                    return num
+                }
+                var leng = num.toString().length;
+                if (leng == 2) {
+                    num = '0.'.concat(num);
+                    return num
+                } else if (leng == 1) {
+                    num = '0.0'.concat(num);
+                    return num
+                } else {
+                    var a = num.toString().substring(0, leng - 2);
+                    var b = num.toString().substring(leng - 2, leng);
+                    var sum = a.concat('.').concat(b);
+                    return sum
+                }
+            },
+            /*列表*/
+            getData: function () {
+                // 列表
+                $.ajax({
+                    url: '/signature/account/list',
+                    type: 'post',
+                    contentType: "application/x-www-form-urlencoded",
+                    dataType: "json",
+                    timeout: 30000,
+                    data: {},
+                    processData: false,//data数据是否转为字符串数据
+                    contentType: false,
+                    success: function (data) {
+                        if (data.code == 0) {
+                            if (data.data.length) {
+                                _this.list = data.data;//列表数据
+                            }
+                        }
+                    },
+                })
+            },
+            //显示页面
+            fileInfo: function (item) {
+                this.fileData = item;//上传信息
+                if (item.loginstate != '3') {
+                    var parmars = {
+                        id: item.id,
+                    };
+                    var formData = new FormData();
+                    for (var key in parmars) {
+                        var value = parmars[key];
+                        formData.append(key, value);
+                    }
+                    $.ajax({
+                        url: '/signature/account/login',
+                        type: 'post',
+                        contentType: "application/x-www-form-urlencoded",
+                        dataType: "json",
+                        timeout: 30000,
+                        data: formData,
+                        processData: false,//data数据是否转为字符串数据
+                        contentType: false,
+                        success: function (data) {
+                            if (data.code == 0) {
+                            	layer.prompt({title: '请输入你要发送的短信验证码', formType: 0}, function (text, index) {
+                                    _this.postSMS(item.id,text)
+                                });
+                            } else {
+                                layer.msg('登录账号失败')
+                            }
+                        },
+                        error: function (xhr, textStatus) {
+                            layer.msg('登录账号失败')
+                        }
+                    })
+                } else {
+                	layer.prompt({title: '请输入你要发送的短信验证码', formType: 0}, function (text, index) {
+                        _this.postSMS(item.id,text)
+                    });
+                }
+            },
+            postSMS: function (id,code) {
+                var parmars = {
+                    id: id,
+                    code: code,
+                };
+                var formData = new FormData();
+                for (var key in parmars) {
+                    var value = parmars[key];
+                    formData.append(key, value);
+                }
+                //console.log(parmars);
+                // 启用状态
+                $.ajax({
+                        url: '/signature/account/smscode',
+                        type: 'post',
+                        contentType: "application/x-www-form-urlencoded",
+                        dataType: "json",
+                        timeout: 30000,
+                        data: formData,
+                        processData: false,//data数据是否转为字符串数据
+                        contentType: false,
+                        success: function (data) {
+                            if (data.code == 0) {
+                            	window.location.href = '/signature/account/index';
+                            } else {
+                            }
+                        },
+                    }
+                )
+            },
+            fileUp: function () {
+                this.fileUpShow = true;//显示弹框信息
+                this.fileData = {
+                    username: '',
+                    password: '',
+                };//上传信息
+            },
+            fileClear: function () {
+                this.fileUpShow = false;//显示弹框信息
+                this.fileData = null;//上传信息
+            },
+            /*切换状态*/
+            tipsCut: function (item, enable) {
+                var parmars = {
+                    id: item.id,
+                    enable: enable,
+                };
+                var formData = new FormData();
+                for (var key in parmars) {
+                    var value = parmars[key];
+                    formData.append(key, value);
+                }
+                //console.log(parmars);
+                // 启用状态
+                $.ajax({
+                        url: '/signature/account/enable',
+                        type: 'post',
+                        contentType: "application/x-www-form-urlencoded",
+                        dataType: "json",
+                        timeout: 30000,
+                        data: formData,
+                        processData: false,//data数据是否转为字符串数据
+                        contentType: false,
+                        success: function (data) {
+                            if (data.code == 0) {
+                                _this.getData();
+                            } else {
+                            }
+                        },
+                    }
+                )
+            },
+            /*提交*/
+            sumbitFile: function () {
+                if (!_this.fileData.username) {
+                    layer.msg('请输入登录账号')
+                    return
+                }
+                if (!_this.fileData.password) {
+                    layer.msg('请输入账号密码')
+                    return
+                }
+                if (!_this.fileData.p8) {
+                    layer.msg('请输入P8文件内容')
+                    return
+                }
+                if (!_this.fileData.iss) {
+                    layer.msg('请输入ISS')
+                    return
+                }
+                if (!_this.fileData.kid) {
+                    layer.msg('请输入KID')
+                    return
+                }
+                var parmars = _this.fileData;
+                var formData = new FormData();
+                for (var key in parmars) {
+                    var value = parmars[key];
+                    formData.append(key, value);
+                }
+                // 提交应用信息
+                $.ajax({
+                    url: '/signature/account/add',
+                    type: 'post',
+                    contentType: "application/x-www-form-urlencoded",
+                    dataType: "json",
+                    timeout: 30000,
+                    data: formData,
+                    processData: false,//data数据是否转为字符串数据
+                    contentType: false,
+                    success: function (data) {
+                        if (data.code == 0) {
+                            layer.msg('添加账号成功')
+                            _this.fileClear();
+                        } else {
+                            layer.msg('添加账号失败')
+                        }
+                    },
+                    error: function (xhr, textStatus) {
+                        layer.msg('添加账号失败')
+                    }
+                })
+            },
+        },
+        mounted() {
+            _this = this;
+            this.getData();
+        },
+    })
+
+</script>
+</html>

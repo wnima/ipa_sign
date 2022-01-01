@@ -1,0 +1,32 @@
+{"properties": [
+  {
+    "name": "spring.datasource.maxPoolPreparedStatementPerConnectionSize",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.maxPoolPreparedStatementPerConnectionSize'"
+  },
+  {
+    "name": "sms.regionid",
+    "type": "java.lang.String",
+    "description": "A description for 'sms.regionid'"
+  },
+  {
+    "name": "sms.accesskeyid",
+    "type": "java.lang.String",
+    "description": "A description for 'sms.accesskeyid'"
+  },
+  {
+    "name": "signature.udid.templates",
+    "type": "java.lang.String",
+    "description": "A description for 'signature.udid.templates'"
+  },
+  {
+    "name": "sms.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'sms.secret'"
+  },
+  {
+    "name": "sms.signname",
+    "type": "java.lang.String",
+    "description": "A description for 'sms.signname'"
+  }
+]}

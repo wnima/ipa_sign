@@ -1,0 +1,497 @@
+html {
+    height: 100%;
+    font-family: PingFangSC-Light, 'helvetica neue', 'hiragino sans gb', arial, 'microsoft yahei ui', 'microsoft yahei', simsun, sans-serif;
+    font-size: 14px;
+}
+
+body {
+    height: 100%;
+    background: #f6f8fa;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    color: rgba(255, 255, 255, .95);
+}
+
+.login-view {
+    display: flex;
+    flex-direction: row;
+    min-height: 650px;
+    max-width: 1200px;
+    width: 100%;
+}
+
+.login-view-right {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 50%;
+    flex: 0 0 100%;
+}
+
+@media screen and (min-width: 750px) {
+    .login-view-left {
+        display: block;
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 50%;
+        flex: 0 0 50%;
+    }
+
+    .login-view-right {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 50%;
+        flex: 0 0 50%;
+    }
+}
+
+@media screen and (min-width: 970px) {
+    .login-view-left {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 62%;
+        flex: 0 0 62%;
+    }
+
+    .login-view-right {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 38%;
+        flex: 0 0 38%;
+    }
+}
+
+
+.login-view-left {
+    width: 100%;
+    min-height: 650px;
+    background: url('../img/login-ad.jpg');
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+    background-size: 100% 100%;
+}
+
+.login-view-right {
+    height: 100%;
+    min-height: 650px;
+    margin: 0px !important;
+    padding: 0px !important;
+    background: #fff;
+    align-items: center;
+    flex-direction: row;
+    display: flex;
+    display: -ms-flexbox;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+}
+
+.logopanel h1 {
+    font-size: 40px;
+}
+
+.signin-info h3 {
+    font-size: 24px;
+}
+.signinpanel {
+    min-width: 1200px;
+    min-height: 650px;
+}
+@media screen and (max-width:750px) {
+    .signin{
+        background: #fff;
+    }
+    .signinpanel {
+        width: auto;
+        min-width: auto !important;
+        min-height: 650px;
+    }
+
+}
+
+
+.btn-login {
+    border: 1px solid #922f6d;
+    background-color: #922f6d;
+    color: #fff;
+    border-radius: 2px;
+}
+
+.btn-login:hover {
+    color: #fff;
+    background-color: #922f6d;
+    border: 1px solid #922f6d;
+}
+
+.signinpanel .logopanel {
+    float: none;
+    width: auto;
+    padding: 0;
+    background: none;
+}
+
+.signinpanel .signin-info ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    font-size: 20px;
+
+}
+
+.signinpanel .form-control {
+    display: block;
+    margin-top: 15px;
+}
+
+.signinpanel .uname {
+    background: #fff url(.../img/user.png) no-repeat 95% center;
+    color: #333;
+}
+
+.signinpanel .pword {
+    background: #fff url(.../img/locked.png) no-repeat 95% center;
+    color: #333;
+}
+
+.signinpanel .btn {
+    margin-top: 15px;
+}
+
+.signinpanel form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 430px;
+    border: 1px solid rgba(255, 255, 255, .3);
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    color: #666;
+    width: 60%;
+    margin: 0px auto;
+}
+
+.signinpanel form > h3 {
+    color: #333333;
+    font-size: 24px;
+    font-family: "microsoft yahei";
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 70px;
+    text-align: center;
+}
+
+.signup-footer {
+    border-top: solid 1px rgba(255, 255, 255, .3);
+    margin: 20px 0;
+    padding-top: 15px;
+}
+
+.outside-login {
+    border-top: #dcdee3 1px solid;
+    padding: 7% 0 0;
+    text-align: center;
+    position: relative;
+    margin: 9% 0% 0;
+    border-radius: 0 0 1% 1%;
+}
+
+.outside-login-tit {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    margin: 0 0 0 -50px;
+    text-align: center;
+    width: 100px;
+    height: 14px;
+    line-height: 1;
+    color: #999;
+}
+
+.outside-login-tit span {
+    position: relative;
+    z-index: 2;
+}
+
+.outside-login-tit:before {
+    top: 0;
+    left: 0;
+    background-color: #fff;
+}
+
+.outside-login-tit:after {
+    top: 7px;
+    left: 0;
+    background-color: #fff;
+}
+
+.outside-login-tit:after, .outside-login-tit:before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 7px;
+    position: absolute;
+    z-index: 1;
+}
+
+.outside-login-con {
+    font-size: 0;
+    padding-top: 10px;
+}
+
+.outside-login-list {
+    width: 116%;
+    margin-left: -8%;
+}
+
+.outside-login-btn {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    width: 33.3333%;
+}
+
+.outside-login-list .actived {
+    display: inline-block;
+}
+
+.outside-login-btn em {
+    display: block;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    border-radius: 50%;
+    margin: 0 auto 5px;
+    white-space: normal;
+    font-size: 20px;
+    color: #fff;
+}
+
+.outside-login-btn:first-child, .outside-login-btn:last-child {
+    width: 30.3333%;
+}
+
+.outside-login-btn span {
+    font-size: 14px;
+    color: #333;
+}
+
+.oschina em {
+    background-color: #4ec34d;
+}
+
+.git em {
+    background-color: #211b1b;
+}
+
+.my em {
+    background-color: #ff4700
+}
+
+@media screen and (max-width: 768px) {
+    .signinpanel,
+    .signuppanel {
+        margin: 0 auto;
+        width: 413px !important;
+        padding: 20px;
+    }
+
+    .signinpanel form {
+        margin-top: 20px;
+    }
+
+    .signup-footer {
+        margin-bottom: 10px;
+    }
+
+    .signuppanel .form-control {
+        margin-bottom: 10px;
+    }
+
+    .signup-footer .pull-left,
+    .signup-footer .pull-right {
+        float: none !important;
+        text-align: center;
+    }
+
+    .signinpanel .signin-info ul {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .signinpanel,
+    .signuppanel {
+        margin: 0 20px;
+        width: auto;
+    }
+}
+
+.login-input-div {
+    width: 100%;
+    border-bottom: 1px solid #e3e4e4;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    display: -ms-flexbox;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+
+}
+
+.login-input-icon {
+    display: flex;
+    min-width: 38px;
+    align-items: center;
+    flex-direction: row;
+    display: -ms-flexbox;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+}
+.login-input-icon img{
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+}
+
+.login-input {
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    border: none;
+    background: none;
+    color: #354052;
+    outline: none;
+    caret-color: #fa0076;
+}
+.getCode{
+    color: #fa0076;
+    cursor: pointer;
+    min-width: 60px;
+    text-align: center;
+    font-size: 14px;
+}
+.login-input:-moz-placeholder {
+    color: #eee !important;
+}
+
+        
+.login-input::-moz-placeholder {
+    color: #eee !important;
+}
+
+        
+.login-input::-ms-input-placeholder {
+    color: #eee !important;
+}
+
+        
+.login-input::-webkit-input-placeholder {
+    color: #eee !important;
+}
+
+.login-sumbit{
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    padding: 0;
+    font-size: 16px;
+    color: #fff;
+    background-image:linear-gradient(135deg,#6d1bc6 0,#fa0076 90%,#6d1bc6 100%);
+    border-color: #922f6d;
+    border-radius: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+.login-sumbit:hover{
+    opacity: 0.8;
+    color: #fff !important;
+}
+.login-bottom-text{
+    margin-top: 80px;
+    text-align: center;
+    color: #cbd1d8;
+}
+.login-bottom-text span{
+    color: #fa0076;
+    margin-left: 10px;
+    cursor: pointer;
+}
+.login-miss-view{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-top: 20px;
+}
+.login-miss{
+    color: #fa0076;
+    cursor: pointer;
+}
+.logon-text{
+    color: #354052;
+    margin-top: 20px;
+    margin-bottom: 60px;
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+    display: -ms-flexbox;
+}
+.logon-text img{
+    margin-top: 2px;
+    margin-right: 10px;
+}
+.layui-layer{
+}
+.app-login-demo{
+    width: 750px !important;
+    position: relative;
+    background-color: #fff !important;
+    border: 0;
+    border-radius: 6px !important;
+    background-clip: padding-box !important;
+    -webkit-box-shadow: 0 4px 12px rgba(0,0,0,.15);
+    box-shadow: 0 4px 12px rgba(0,0,0,.15) !important;
+}
+.layui-layer-title{
+    padding: 0px !important;
+    background: #fff !important;
+    border-bottom: 0px !important;
+    border-radius: 6px !important;
+    text-align: center;
+    font-size: 16px !important;
+}
+.ivu-modal-body{
+    padding: 16px;
+    font-size: 12px;
+    line-height: 1.5;
+    max-width: 750px;
+}
+@media (max-width: 576px) {
+    .app-login-demo {
+        width: auto !important;
+        margin: 10px;
+    }
+}
+.info-item{
+    color: #7b7f83;
+    line-height: 30px;
+}
+.info-item-scroll li p{
+}
+.info-item-scroll p{
+    color: #7b7f83;
+    line-height: 30px;
+}
+.info-item-scroll h4{
+    color: #354052;
+}
+.info-item-scroll{
+    max-height: 400px;
+    overflow: auto;
+    margin-bottom: 20px;
+    font-style: normal;
+    font-size: inherit;
+    color: #7b7f83;
+
+}
